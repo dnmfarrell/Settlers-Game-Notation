@@ -1,0 +1,416 @@
+=pod
+
+=encoding utf8
+
+=head1 Catan Game Notation
+
+This document defines a notation for the game Settlers of Catan, called
+"Catan Game Notation" (CGN).
+
+This is alpha stage and is untested. Feedback welcome!
+
+=head2 Locations
+
+Where a tile is. All tiles are numbered, including the sea tiles. The
+numbering start in the top-left corner and spirals inwards.
+
+Even sea tiles are numbered. The left-most graphic shows all numbered tiles,
+the right one shows the numbers of the land tiles only:
+
+        01  02  03  04                ~~  ~~  ~~  ~~
+      18  19  20  21  05            ~~  19  20  21  ~~
+    17  30  31  32  22  06        ~~  30  31  32  22  ~~
+  16  29  36  37  33  23  07    ~~  29  36  37  33  23  ~~
+    15  28  35  34  24  08        ~~  28  35  34  24  ~~
+      14  27  26  25  09            ~~  27  26  25  ~~
+        13  12  11  10                ~~  ~~  ~~  ~~
+
+The spiral pattern has the benefit of implying things about the tile locations:
+higher number locations are more central, and usually more valuable.Sea tiles
+are numbers 1-18.
+
+=head2 Resources
+
+There are 5 types of resources:
+
+  B  Brick
+  G  Grain
+  L  Lumber
+  O  Ore
+  W  Wool
+
+=head2 Tile Types
+
+A tile can be any one of the below
+
+  H   Hills
+  D   Desert
+  HR  Harbor Generic
+  HR_ Harbor Specific: B, G, L, O, W
+  M   Mountains
+  S   Sea
+  F   Fields
+  FO  Forest
+  P   Pasture
+
+=head2 Resource Number
+
+A tile can have one resource number on it.
+
+  2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12
+
+=head2 Tile Notation
+
+Location, Type, Resource Number. C<-> represents null. The starter map layout:
+
+  L  T   N    L  T   N
+  =========   =========
+  1  HR   -   20 P   2
+  2  S    -   21 FO  9
+  3  HRG  -   22 H   10
+  4  S    -   23 M   8
+  5  HRO  -   24 P   5
+  6  S    -   25 P   11
+  7  HR   -   26 F   6
+  8  S    -   27 H   5
+  9  HR   -   28 FO  8
+  10 S    -   29 F   9
+  11 HRW  -   30 F   12
+  12 S    -   31 H   6
+  13 HR   -   32 P   4
+  14 S    -   33 FO  3
+  15 HRB  -   34 F   4
+  16 S    -   35 O   3
+  17 HRL  -   36 FO  11
+  18 S    -   37 D    -
+  19 M   10
+
+A map can be completely defined by a dictionary of tile notations, this is the
+same map in JSON:
+
+  {
+    "1": ["HR",null],
+    "2": ["S",null],
+    "3": ["HRG",null],
+    "4": ["S",null],
+    "5": ["HRO",null],
+    "6": ["S",null],
+    "7": ["HR",null],
+    "8": ["S",null],
+    "9": ["HR",null],
+    "10":["S",null],
+    "11":["HRW",null],
+    "12":["S",null],
+    "13":["HR",null],
+    "14":["S",null],
+    "15":["HRB",null],
+    "16":["S",null],
+    "17":["HRL",null],
+    "18":["S",null],
+    "19":["M",10],
+    "20":["P",2],
+    "21":["FO",9],
+    "22":["H",10],
+    "23":["M",8],
+    "24":["P",5],
+    "25":["P",11],
+    "26":["F",6],
+    "27":["H",5],
+    "28":["FO",8],
+    "29":["F",9],
+    "30":["F",12],
+    "31":["H",6],
+    "32":["P",4],
+    "33":["FO",3],
+    "34":["F",4],
+    "35":["O",3],
+    "36":["FO",11],
+    "37":["D",null]
+  }
+
+=head2 Intersections
+
+Intersections represent a point between 3 tile locations. The tile locations
+can be in any order, but preference is a clockwise listing. E.g. the six
+intersections of the top-left mountain tile on the starter map layout:
+
+            1 2 19
+            /  \
+   1 19 18 /    \ 2 20 19
+          |  19  |
+          |      |
+  19 30 18 \    / 20 31 19
+            \  /
+           19 31 30
+
+The intersections for a game are always the same and are represented in JSON
+by an array of three elements:
+
+  [1,2,19]
+
+=head2 Paths
+
+Paths are lines between two adjacent intersections and are represented
+as an array of two intersections:
+
+  [ [2,20,19], [20,31,19] ]
+
+As with intersections, the paths available in a game are always be the same.
+
+=head2 Assets
+
+Players may accumulate these throughout the game. There are four normal and two
+special types:
+
+  Code  Name              How to get it
+  ==========================================
+  DC    Development card  Build action
+  S     Settlement        Build action
+  C     City              Build action
+  R     Road              Build action
+  LA    Largest army      Largest Army event
+  LR    Longest road      Longest Road event
+
+There are 5 types of development cards:
+
+  KN  Knight
+  MO  Monopoly
+  RB  Road building
+  VP  Victory Point
+  YP  Year of plenty
+
+=head2 Game play
+
+Game play consists of players taking actions and events occurring. Restrictions
+apply to which actions a player can take at different times of the game.
+
+=head2 Events
+
+Events are usually side-effects from player actions or related to general
+game mechanics like setup and end. Events control what actions a player can
+(or must) take.
+
+These are the events:
+
+  Code Name                     Detail
+  ===================================================
+  PA   Player Add               player #
+  PR   Player Remove
+  MD   Map Define
+  PS   Phase Start              Setup|Deployment|Play
+  PE   Phase End                Setup|Deployment|Play
+  RS   Round Start              round #
+  RE   Round End                round #
+  RP   Resource Production      A&R Notation
+  R!   Robber!
+  TS   Turn Start               player #
+  TE   Turn End                 player #
+  SP   Set player order         ["P3","P4","P1","P2"]
+  LA   Largest army             player #
+  LR   Longest road             player #
+  CH   Chat                     player #, text
+  GO   Game Over                winning player #
+
+In JSON the code and the detail sections are provided:
+
+  Notation       Meaning
+  =================================
+  "PS": "Setup"  Phase Start, setup
+  "MD": { ... }  Map define
+
+=head2 Actions
+
+Actions are things that a player can (or sometimes must) do:
+
+  Code Name                   Detail
+  =======================================================
+  O    Offer trade            UUID, A&R Notation
+  W    Withdraw offer         UUID
+  A    Accept trade           UUID
+  B    Build asset            A&R Notation
+  R    Roll dice              "P1":#
+  C    Concede resource       A&R Notation
+  D    Deploy asset           Asset code, location
+  T    Trade resources        A&R Notation
+  P    Play development card  Card type (KN|MO|RB|VP|YP)
+  S    Steal resources        A&R Notation
+  M    Move robber            Tile Location (#)
+  Q    Quit game              Player name
+
+Action notation consists of the action code, and the required detail. Here's an
+annotated sample turn for player 1:
+
+  R {"P1":7}               # P1 rolls a 7
+  M {"P1":34}              # P1 moves the robber to tile 34
+  S {"P1": P3{{"G":1}}     # P1 steals 1 grain from P3
+  B {"P1":{"S":1}}         # P1 builds settlement
+  D {"P1":{"S":[2,20,21]}} # P1 deploys a settlement at intersection 2 20 21
+
+=head2 Trading
+
+Trading is a big part of Catan. Trades have two parts: offer and acceptance.
+A Player may offer a trade to other players using A&R Notation. The trade offer
+should have a Universal Unique IDentifier (UUID) associated with it.
+
+The trade offer can be ended in four ways:
+
+=over 4
+
+=item * Withdraw offer
+
+The offering player cancels the offer using the Withdraw offer action.
+
+=item * Acceptance
+
+A player accepts the offer. The first player to do this wins the trade and the
+goods should be exchanged using the Trade resources action.
+
+=item * Offer a new trade
+
+The offering player can offer a new trade, this autommatically cancels any
+existing trade offer they had made.
+
+=item * End turn
+
+If a player's turn ends, all offers are cancelled.
+
+=back
+
+Here is an example trade between player 1 and player 2:
+
+  "O":{"P1":{"B":-2,"W":1},"P2":{"B":2,"W":-1}, "UUID":"1234-56789-01234"},
+  "A":{"P2":{"UUID":"1234-56789-01234"}},
+  "T":{"P1":{"B":-2,"W":1},"P3":{"B":2,"W":-1}, "UUID":"1234-56789-01234"},
+
+The exchange begins with a Trade offer from player 1 for 1 wool in exchange for
+2 brick to player 2. Player 2 accepts the offer, and this triggers the Trade
+action.
+
+Trades can be offered to more than one person at time, here the same offer is
+provided to players 2 and 4:
+
+  "O":{"P1":{"B":-2,"W":1},
+       "?":{"P2":{"B":2,"W":-1},
+            "P4":{"B":2,"W":-1}},
+       "UUID":"1234-56789-01234"
+      },
+
+Because A&R notation has to balance, we represent the "other side" of the trade
+with the unknown player C<?>. This is a key to a dictionary of player names
+and the details of the offer. This makes it possible to offer a single trade to
+one or more players at a time.
+
+=head2 Asset and Resources Notation (A&R Notation)
+
+A&R Notation records which assets or resources and in what quantity are being
+traded by players with the bank or with each other.
+
+A&R uses the asset or resource code as the key and the value as the quantity.
+Both quantities gained and lost are listed. So a trade between player 1 and
+player 2 for 2 lumber for a wool looks like:
+
+  {
+    "P1":{"L":-2,"W":1},
+    "P2":{"L":2,"W":-1 }
+  }
+
+The implication of this notation is that all resources must balance. For trades
+with the bank, C<B> represents the bank:
+
+  {
+    "P1":{"G":-4,"B":1},
+    "B":{"G":4,"B":-1}
+  }
+
+A&R Notation isn't just for trades. It's used for gains from resource
+production, stealing resources with the robber, conceding resources back to the
+bank and building. For example if player 3 wanted to build a road with 1 brick
+and 1 lumber:
+
+  {
+    "P3":{"R":1,"B":-1,"L":-1},
+    "B":{"R":-1,"B":1,"L":1}
+  }
+
+=head2 Comments and Chat
+
+Comments can be added with the C<#> symbol:
+
+  # "This is a comment"
+
+Player chat uses the event code C<CH>. It provides a key/pair of the player
+name and the chat text. Here's a conversation:
+
+  CH {"P1":"Let's do this!"},
+  CH {"P2":"You're going to lose again!"}
+
+Comments and chat are not necessary for game notation, but may help with the
+implementation of a Catan server using game notation.
+
+=head2 Phases
+
+=over 4
+
+=item 1 Setup
+
+Setup involves the events add player and define map. This is an example setup
+for a 4 player game:
+
+  PS "Setup"
+  PA "P1"
+  PA "P2"
+  PA "P3"
+  PA "P4"
+  MD { (Tile notation) }
+  PE "Setup"
+
+=item 2 Deployment
+
+Players can deploy settlements and roads in the deployment phase. Settlements
+must be placed on an unoccupied intersection with no settlement on an adjacent
+intersection. Roads must be placed on lines with one end on the player's
+settlement. Each player gains 2 settlements, 2 roads and resources depending
+on their second settlement placement.
+
+  PS "Deployment"
+  T  {"P1":{"S":2,"R":2},
+      "P2":{"S":2,"R":2},
+      "P3":{"S":2,"R":2},
+      "P4":{"S":2,"R":2},
+      "B":{"S":-8,"R":-8}},
+  R  {"P1":3, "P2":5, "P3":11, "P4":8}
+  SP ["P3","P4","P1","P2"]
+  D  {"P3": {"S":[20 31 19],"R":[[20 31 19], [20 31 31]]} }
+  ...
+  PE "Deployment"
+
+=item 3 Play
+
+TBC
+
+=back
+
+=head2 Example
+
+See the file F<example.json> for an example of CGN notation. It is not yet
+finished!
+
+=head1 FAQ
+
+=over 4
+
+=item *
+
+I<Is CGN case-sensitive>? No.
+
+=back
+
+=head2 Author
+
+David Farrell, E<copy> 2015.
+
+=head2 License
+
+FreeBSD, see LICENSE
+
+=cut
