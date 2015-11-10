@@ -4,40 +4,35 @@
 
 =head1 Catan Game Notation
 
-This document defines a notation for the game Settlers of Catan, called
-"Catan Game Notation" (CGN).
+This document defines a notation for the game Settlers of Catan, called "Catan Game Notation" (CGN). CGN is represented as JSON and is designed to capture "what happened" for a game of Catan using the base game.
 
 This is alpha stage and is untested. Feedback welcome!
 
-=head2 Locations
+=head2 Log
 
-Where a tile is. All tiles are numbered, including the sea tiles. The
-numbering start in the top-left corner and spirals inwards.
+A log of CGN captures the entirety of a game of Catan from setup to end. The log is an array of objects that contain notation describing what happened.
 
-Even sea tiles are numbered. The left-most graphic shows all numbered tiles,
-the right one shows the numbers of the land tiles only:
+=head2 Tile Locations
 
-        01  02  03  04                ~~  ~~  ~~  ~~
-      18  19  20  21  05            ~~  19  20  21  ~~
-    17  30  31  32  22  06        ~~  30  31  32  22  ~~
-  16  29  36  37  33  23  07    ~~  29  36  37  33  23  ~~
-    15  28  35  34  24  08        ~~  28  35  34  24  ~~
-      14  27  26  25  09            ~~  27  26  25  ~~
-        13  12  11  10                ~~  ~~  ~~  ~~
+All tiles are numbered (including sea tiles), using the axial (trapezoidal) coordinate system:
 
-The spiral pattern has the benefit of implying things about the tile locations:
-higher number locations are more central, and usually more valuable.Sea tiles
-are numbers 1-18.
+             0,-3  1,-3  2,-3   3,-3
+         -1,-2  0,-2  1,-2   2,-2   3,-2
+     -2,-1  -1,-1  0,-1   1,-1   2,-1   3,-1
+  -3,0   -2,0   -1,0    0,0    1,0    2,0    3,0
+     -3,1   -2,1   -1,1   0,1    1,1    2,1
+        -3,2   -2,2   -1,2  0,2    1,2
+           -3,3   -2,3   -1,3  0,3
 
-=head2 Resources
+This is the same map with the sea tiles represented by tildes (incorrect notation but easier to interpret visually):
 
-There are 5 types of resources:
-
-  B  Brick
-  G  Grain
-  L  Lumber
-  O  Ore
-  W  Wool
+           ~~~~  ~~~~  ~~~~   ~~~~
+        ~~~~ 0,-2   1,-2   2,-2  ~~~~
+     ~~~~  -1,-1  0,-1  1,-1  2,-1  ~~~~
+  ~~~~  -2,0   -1,0   0,0   1,0   2,0  ~~~~
+     ~~~~  -2,1   -1,1   0,1   1,1  ~~~~
+        ~~~~  -2,2   -1,2   0,2  ~~~~
+           ~~~~   ~~~~   ~~~~  ~~~~
 
 =head2 Tile Types
 
@@ -55,107 +50,83 @@ A tile can be any one of the below
 
 =head2 Resource Number
 
-A tile can have one resource number on it.
+A tile can have one resource number on it, valid numbers are between 2-6 and 8-12. There is also a limit on the frequency of resource numbers. These are all the avialable resource numbers for a basic game:
 
   2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12
 
 =head2 Tile Notation
 
-Location, Type, Resource Number. C<-> represents null. The starter map layout:
+Tile notation is used to define the playing map. Every tile is listed with its coordinates, type and resource number. C<null> represents no resource number. The starter map layout:
 
-  L  T   N    L  T   N
-  =========   =========
-  1  HR   -   20 P   2
-  2  S    -   21 FO  9
-  3  HRG  -   22 H   10
-  4  S    -   23 M   8
-  5  HRO  -   24 P   5
-  6  S    -   25 P   11
-  7  HR   -   26 F   6
-  8  S    -   27 H   5
-  9  HR   -   28 FO  8
-  10 S    -   29 F   9
-  11 HRW  -   30 F   12
-  12 S    -   31 H   6
-  13 HR   -   32 P   4
-  14 S    -   33 FO  3
-  15 HRB  -   34 F   4
-  16 S    -   35 O   3
-  17 HRL  -   36 FO  11
-  18 S    -   37 D    -
-  19 M   10
-
-A map can be completely defined by a dictionary of tile notations, this is the
-same map in JSON:
-
-  {
-    "1": ["HR",null],
-    "2": ["S",null],
-    "3": ["HRG",null],
-    "4": ["S",null],
-    "5": ["HRO",null],
-    "6": ["S",null],
-    "7": ["HR",null],
-    "8": ["S",null],
-    "9": ["HR",null],
-    "10":["S",null],
-    "11":["HRW",null],
-    "12":["S",null],
-    "13":["HR",null],
-    "14":["S",null],
-    "15":["HRB",null],
-    "16":["S",null],
-    "17":["HRL",null],
-    "18":["S",null],
-    "19":["M",10],
-    "20":["P",2],
-    "21":["FO",9],
-    "22":["H",10],
-    "23":["M",8],
-    "24":["P",5],
-    "25":["P",11],
-    "26":["F",6],
-    "27":["H",5],
-    "28":["FO",8],
-    "29":["F",9],
-    "30":["F",12],
-    "31":["H",6],
-    "32":["P",4],
-    "33":["FO",3],
-    "34":["F",4],
-    "35":["O",3],
-    "36":["FO",11],
-    "37":["D",null]
-  }
+  [
+    [0,-3,"HR",null],
+    [1,-3,"S",null],
+    [2,-3,"HRG",null],
+    [3,-3,"S",null],
+    [3,-2,"HRO",null],
+    [3,-1,"S",null],
+    [3,0,"HR",null],
+    [2,1,"S",null],
+    [1,2,"HR",null],
+    [0,3,"S",null],
+    [-1,3,"HRW",null],
+    [-2,3,"S",null],
+    [-3,3,"HR",null],
+    [-3,2,"S",null],
+    [-3,1,"HRB",null],
+    [-3,0,"S",null],
+    [-2,-1,"HRL",null],
+    [-1,-2,"S",null],
+    [0,-2,"M",10],
+    [1,-2,"P",2],
+    [2,-2,"FO",9],
+    [2,-1,"H",10],
+    [2,0,"M",8],
+    [1,1,"P",5],
+    [0,2,"P",11],
+    [-1,2,"F",6],
+    [-2,2,"H",5],
+    [-2,1,"FO",8],
+    [-2,0,"F",9],
+    [-1,-1,"F",12],
+    [0,-1,"H",6],
+    [1,-1,"P",4],
+    [1,0,"FO",3],
+    [0,1,"F",4],
+    [-1,1,"O",3],
+    [-1,0,"FO",11],
+    [0,0,"D",null]
+  ]
 
 =head2 Intersections
 
-Intersections represent a point between 3 tile locations. The tile locations
-can be in any order, but preference is a clockwise listing. E.g. the six
-intersections of the top-left mountain tile on the starter map layout:
+Intersections represent a point between 3 tile locations in a clockwise order. Intersections are represented as an array of 3 tile locations. E.g. the six intersections of the center desert tile on the starter map layout:
 
-            1 2 19
-            /  \
-   1 19 18 /    \ 2 20 19
-          |  19  |
-          |      |
-  19 30 18 \    / 20 31 19
-            \  /
-           19 31 30
+                 [[0,-1],[0,0],[-1,0]]
+                         /   \
+  [[0,-1],[0,0],[-1,0]] /     \  [[1,-1],[1,0],[0,0]]
+                       |  0,0  |
+                       |       |
+  [[0,0],[-1,1],[-1,0]] \     /  [[1,0],[0,1],[0,0]]
+                         \   /
+                 [[0,1],[-1,1],[0,0]]
 
-The intersections for a game are always the same and are represented in JSON
-by an array of three elements:
-
-  [1,2,19]
 
 =head2 Paths
 
-Paths are lines between two adjacent intersections and are represented
-as an array of two intersections:
+Paths are lines between contiguous intersections and are represented as an array of intersections. Each path must have at least two intersections:
 
-  [ [2,20,19], [20,31,19] ]
+  [ [[0,0],[-1,1],[-1,0]], [[0,1],[-1,1],[0,0]] ]
 
-As with intersections, the paths available in a game are always be the same.
+=head2 Resources
+
+There are 5 types of resources:
+
+  B  Brick
+  G  Grain
+  L  Lumber
+  O  Ore
+  W  Wool
 
 =head2 Assets
 
@@ -179,18 +150,9 @@ There are 5 types of development cards:
   VP  Victory Point
   YP  Year of plenty
 
-=head2 Game play
-
-Game play consists of players taking actions and events occurring. Restrictions
-apply to which actions a player can take at different times of the game.
-
 =head2 Events
 
-Events are usually side-effects from player actions or related to general
-game mechanics like setup and end. Events control what actions a player can
-(or must) take.
-
-These are the events:
+Events are the things which drive the game: player actions, dice rolls etc.
 
   Code Name                     Detail
   ===================================================
@@ -210,47 +172,29 @@ These are the events:
   LR   Longest road             player #
   CH   Chat                     player #, text
   GO   Game Over                winning player #
+  O    Offer trade              UUID, A&R Notation
+  W    Withdraw offer           UUID
+  A    Accept trade             UUID
+  B    Build asset              A&R Notation
+  R    Roll dice                "P1":#
+  C    Concede resource         A&R Notation
+  D    Deploy asset             Asset code, location
+  T    Trade resources          A&R Notation
+  P    Play development card    Card type (KN|MO|RB|VP|YP)
+  S    Steal resources          A&R Notation
+  M    Move robber              Tile Location (#)
+  Q    Quit game                Player name
 
 In JSON the code and the detail sections are provided:
 
-  Notation       Meaning
-  =================================
-  "PS": "Setup"  Phase Start, setup
-  "MD": { ... }  Map define
-
-=head2 Actions
-
-Actions are things that a player can (or sometimes must) do:
-
-  Code Name                   Detail
-  =======================================================
-  O    Offer trade            UUID, A&R Notation
-  W    Withdraw offer         UUID
-  A    Accept trade           UUID
-  B    Build asset            A&R Notation
-  R    Roll dice              "P1":#
-  C    Concede resource       A&R Notation
-  D    Deploy asset           Asset code, location
-  T    Trade resources        A&R Notation
-  P    Play development card  Card type (KN|MO|RB|VP|YP)
-  S    Steal resources        A&R Notation
-  M    Move robber            Tile Location (#)
-  Q    Quit game              Player name
-
-Action notation consists of the action code, and the required detail. Here's an
-annotated sample turn for player 1:
-
-  R {"P1":7}               # P1 rolls a 7
-  M {"P1":34}              # P1 moves the robber to tile 34
-  S {"P1": P3{{"G":1}}     # P1 steals 1 grain from P3
-  B {"P1":{"S":1}}         # P1 builds settlement
-  D {"P1":{"S":[2,20,21]}} # P1 deploys a settlement at intersection 2 20 21
+  [ "PS": "Setup",
+    "MD": { ... }
+  ]
 
 =head2 Trading
 
 Trading is a big part of Catan. Trades have two parts: offer and acceptance.
-A Player may offer a trade to other players using A&R Notation. The trade offer
-should have a Universal Unique IDentifier (UUID) associated with it.
+A Player may offer a trade to other players using A&R Notation.
 
 The trade offer can be ended in four ways:
 
