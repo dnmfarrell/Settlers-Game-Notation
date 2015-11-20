@@ -6,8 +6,6 @@
 
 This document defines a notation for the game Settlers of Catan, called "Catan Game Notation" (CGN). CGN is represented as JSON and is designed to capture "what happened" for a game of Catan using the base game.
 
-This is alpha stage and is untested. Feedback welcome!
-
 =head2 Log
 
 A log of CGN captures the entirety of a game of Catan from setup to end. The log is an array of objects that contain notation describing what happened. See F<example.json> for an entire game log.
@@ -248,20 +246,16 @@ Here is an example trade between player 1 and player 2:
   "TA":{"player":"2", "uuid":"1234-56789-01234"},
   "TR":{"resources":{"1":{"B":-2,"W":1},"3":{"B":2,"W":-1}}},
 
-The exchange begins with a Trade offer from player 1 for 1 wool in exchange for
-2 brick to player 2. Player 2 accepts the offer, and this triggers the Trade
-resources event.
+The exchange begins with a Trade offer from player 1 for 1 wool in exchange for 2 brick to player 2. Player 2 accepts the offer, and this triggers the Trade resources event.
 
 =head2 Chat
 
-Player chat uses the event code C<CH>. It provides a key/pair of the player
-name and the chat text. Here's a conversation:
+Player chat uses the event code C<CH>. It provides a key/pair of the player name and the chat text. Here's a conversation:
 
-  CH {"P1":"Let's do this!"},
-  CH {"P2":"You're going to lose again!"}
+  "CH": {"player":"1", "msg"::"Let's do this!"},
+  "CH": {"player":"2", "msg"::"You're going to lose again"},
 
-Chat is not necessary for game notation, but may help with the
-implementation of a Catan server using game notation.
+Chat is not necessary for game notation, but may help with the implementation of a Catan server using game notation. Server or referee chat messages have the player id C<A> for admin.
 
 =head2 Phases
 
@@ -300,6 +294,10 @@ A round is one cycle of every player's turn. The Deployment phase has 2 rounds a
 =item * I<Why is there no Road Building event?> There is no need for it. When the Play Development card event occurs with a type of C<RB> that indicates road building is active. The player can then build roads using the build road event.
 
 =back
+
+=head2 See Also
+
+L<Catan-Server|https://github.com/dnmfarrell/Catan-Server> is my attempt to implement a Catan game server using CGN.
 
 =head2 Version
 
