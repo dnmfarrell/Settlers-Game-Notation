@@ -10,9 +10,9 @@ This is alpha stage and is untested. Feedback welcome!
 
 =head2 Log
 
-A log of CGN captures the entirety of a game of Catan from setup to end. The log is an array of objects that contain notation describing what happened.
+A log of CGN captures the entirety of a game of Catan from setup to end. The log is an array of objects that contain notation describing what happened. See F<example.json> for an entire game log.
 
-=head2 Tile Locations
+=head2 Tiles
 
 All tiles are numbered (including sea tiles), using the axial (trapezoidal) coordinate system:
 
@@ -46,11 +46,11 @@ A tile can be any one of the below
   S   Sea
   F   Fields
   FO  Forest
-  P   Pasture
+  P   Pastures
 
 =head2 Resource Number
 
-A tile can have one resource number on it, valid numbers are between 2-6 and 8-12. There is also a limit on the frequency of resource numbers. These are all the avialable resource numbers for a basic game:
+A tile can have one resource number on it, valid numbers are between 2-6 and 8-12. There is also a limit on the frequency of resource numbers. These are all the available resource numbers for a basic game:
 
   2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12
 
@@ -61,46 +61,46 @@ Tile notation is used to define the playing map. Every tile is listed with its c
   [
     [0,-3,"HR",null],
     [1,-3,"S",null],
-    [2,-3,"HRG",null],
+    [2,-3,"HRW",null],
     [3,-3,"S",null],
-    [3,-2,"HRO",null],
+    [3,-2,"HR",null],
     [3,-1,"S",null],
-    [3,0,"HR",null],
+    [3,0,"HRG",null],
     [2,1,"S",null],
-    [1,2,"HR",null],
+    [1,2,"HRB",null],
     [0,3,"S",null],
-    [-1,3,"HRW",null],
+    [-1,3,"HRL",null],
     [-2,3,"S",null],
     [-3,3,"HR",null],
     [-3,2,"S",null],
-    [-3,1,"HRB",null],
+    [-3,1,"HR",null],
     [-3,0,"S",null],
-    [-2,-1,"HRL",null],
+    [-2,-1,"HRO",null],
     [-1,-2,"S",null],
-    [0,-2,"M",10],
-    [1,-2,"P",2],
-    [2,-2,"FO",9],
-    [2,-1,"H",10],
-    [2,0,"M",8],
-    [1,1,"P",5],
-    [0,2,"P",11],
-    [-1,2,"F",6],
-    [-2,2,"H",5],
-    [-2,1,"FO",8],
-    [-2,0,"F",9],
-    [-1,-1,"F",12],
-    [0,-1,"H",6],
-    [1,-1,"P",4],
-    [1,0,"FO",3],
-    [0,1,"F",4],
-    [-1,1,"O",3],
-    [-1,0,"FO",11],
-    [0,0,"D",null]
+    [0,-2,"FO",11],
+    [1,-2,"P",12],
+    [2,-2,"F",9],
+    [2,-1,"P",10],
+    [2,0,"F",8],
+    [1,1,"M",3],
+    [0,2,"FO",6],
+    [-1,2,"F",2],
+    [-2,2,"M",5],
+    [-2,1,"H",8],
+    [-2,0,"D",null],
+    [-1,-1,"H",4],
+    [0,-1,"M",6],
+    [1,-1,"H",5],
+    [1,0,"FO",4],
+    [0,1,"P",9],
+    [-1,1,"P",10],
+    [-1,0,"FO",3],
+    [0,0,"F",11]
   ]
 
 =head2 Intersections
 
-Intersections represent a point between 3 tile locations in a clockwise order. Intersections are represented as an array of 3 tile locations. E.g. the six intersections of the center desert tile on the starter map layout:
+Intersections represent a point between 3 tile locations in a clockwise order. Intersections are represented as an array of 3 tile locations. E.g. the six intersections of the center tile on the starter map layout:
 
                  [[0,-1],[0,0],[-1,0]]
                          /   \
@@ -122,11 +122,35 @@ Paths are lines between contiguous intersections and are represented as an array
 
 There are 5 types of resources:
 
-  B  Brick
-  G  Grain
-  L  Lumber
-  O  Ore
-  W  Wool
+  Code  Type
+  ------------
+  B     Brick
+  G     Grain
+  L     Lumber
+  O     Ore
+  W     Wool
+
+=head2 Resources notation
+
+Resources notation records which resources and in what quantity are being traded by players with the bank or with each other.
+
+It uses the resource code as the key and the value as the quantity. Both quantities gained and lost are listed. So a trade between player 1 and
+player 2 for 2 lumber for a wool looks like:
+
+  {
+    "1":{"L":-2,"W":1},
+    "2":{"L":2,"W":-1 }
+  }
+
+The implication of this notation is that all resources must balance. For trades with the bank, C<bank> represents the bank:
+
+  {
+    "1":{"G":-4,"B":1},
+    "bank":{"G":4,"B":-1}
+  }
+
+Resource notation isn't just for trades. It's used for gains from resource production, stealing resources with the robber and conceding resources back to the
+bank.
 
 =head2 Assets
 
@@ -134,153 +158,101 @@ Players may accumulate these throughout the game. There are four normal and two
 special types:
 
   Code  Name              How to get it
-  ==========================================
-  DC    Development card  Build action
-  S     Settlement        Build action
-  C     City              Build action
-  R     Road              Build action
+  ---------------------------------------------------------
+  DC    Development card  Build development card event (BD)
+  S     Settlement        Build settlement event (BS)
+  C     City              Build city event (BC)
+  R     Road              Build road event (BR)
   LA    Largest army      Largest Army event
   LR    Longest road      Longest Road event
 
 There are 5 types of development cards:
 
-  KN  Knight
-  MO  Monopoly
-  RB  Road building
-  VP  Victory Point
-  YP  Year of plenty
+  Type  Name
+  -------------------
+  KN    Knight
+  MO    Monopoly
+  RB    Road building
+  VP    Victory Point
+  YP    Year of plenty
 
 =head2 Events
 
-Events are the things which drive the game: player actions, dice rolls etc.
+Events are the things which drive the game: player actions, dice rolls etc. Every entry in CGN is an event, consisting of an event code and a JSON value. Refer to F<example.json> for examples of these events in CGN.
 
-  Code Name                     Detail
-  ===================================================
-  PA   Player Add               player #
-  PR   Player Remove
-  MD   Map Define
-  PS   Phase Start              Setup|Deployment|Play
-  PE   Phase End                Setup|Deployment|Play
-  RS   Round Start              round #
-  RE   Round End                round #
-  RP   Resource Production      A&R Notation
-  R!   Robber!
-  TS   Turn Start               player #
-  TE   Turn End                 player #
-  SP   Set player order         ["P3","P4","P1","P2"]
-  LA   Largest army             player #
-  LR   Longest road             player #
-  CH   Chat                     player #, text
-  GO   Game Over                winning player #
-  O    Offer trade              UUID, A&R Notation
-  W    Withdraw offer           UUID
-  A    Accept trade             UUID
-  B    Build asset              A&R Notation
-  R    Roll dice                "P1":#
-  C    Concede resource         A&R Notation
-  D    Deploy asset             Asset code, location
-  T    Trade resources          A&R Notation
-  P    Play development card    Card type (KN|MO|RB|VP|YP)
-  S    Steal resources          A&R Notation
-  M    Move robber              Tile Location (#)
-  Q    Quit game                Player name
-
-In JSON the code and the detail sections are provided:
-
-  [ "PS": "Setup",
-    "MD": { ... }
-  ]
+  Code Name                    Value
+  ==================================================
+  BC   Build city              {"player": "#", "intersection":<intersection coordinates>}
+  BD   Build development card  {"player": "#", "type": "KN|MO|RB|VP|YP"}
+  BR   Build road              {"player": "#", "path":<path coordinates>}
+  BS   Build settlement        {"player": "#", "intersection":<intersection coordinates>}
+  CH   Chat                    {"player": "#", "msg": "msg text"}
+  CR   Concede resources       {"player": "#", "resources":<resource notation>}
+  DR   Dice roll               {"player": "#", "result":#}
+  GO   Game Over               {"player": "#"}
+  LA   Largest army            {"player": "#", "strength":#}
+  LR   Longest road            {"player": "#"}, "length":#}
+  MD   Map Define              [ <tile notation> ]
+  MO   Monopoly                {"player": "#", "resources":<resource notation>}
+  PA   Player Add              {"player": "#"}
+  PD   Play development card   {"player": "#", "type": "KN|MO|RB|VP|YP"}
+  PE   Phase End               {"phase": "Setup|Deployment|Play|End"}
+  PS   Phase Start             {"phase": "Setup|Deployment|Play|End"}
+  RA   Robber activate         null
+  RD   Robber deactivate       null
+  RE   Round End               {"round": #}
+  RM   Robber move             {"player": "#", "tile": <tile coordinates>}
+  RP   Resource Production     { "resources": <resource notation> }
+  RR   Robber rob              { "player":"#", "resources": <resource notation> }
+  RS   Round Start             {"round": #}
+  TA   Trade accept            {"player": "#", "uuid":"#"}
+  TB   Trade bank              {"player": "#", "resources":<resource notation>}
+  TC   Trade cancel            {"player": "#", "uuid":"#"}
+  TE   Turn End                {"player": "#"}
+  TO   Trade offer             {"player": "#", "uuid":"#", "resources":<resource notation>}
+  TR   Trade resources         {"player": "#", "uuid":"#", "resources":<resource notation>}
+  TS   Turn Start              {"player": "#"}
+  YP   Year of plenty          {"player": "#", "resources":<resource notation>}
 
 =head2 Trading
 
-Trading is a big part of Catan. Trades have two parts: offer and acceptance.
-A Player may offer a trade to other players using A&R Notation.
+Trading is a big part of Catan. Players may trade with each other or with the Bank. 
 
-The trade offer can be ended in four ways:
+Bank trades are described using the trade bank event. For example:
+
+  "TB":{"player":"2", "resources":{"bank":{"B":"-1","O":"4"},"2":{"B":"1","O":"-4"}}
+
+Player trades have two parts: offer and acceptance. A Player may offer a trade to other players with resource notation and a universal unique id (uuid).
+
+The trade offer can be ended with:
 
 =over 4
 
-=item * Withdraw offer
+=item * Trade cancel
 
-The offering player cancels the offer using the Withdraw offer action.
+The offering player cancels the offer using the trade cancel event.
 
-=item * Acceptance
+=item * Trade accept
 
-A player accepts the offer. The first player to do this wins the trade and the
-goods should be exchanged using the Trade resources action.
-
-=item * Offer a new trade
-
-The offering player can offer a new trade, this autommatically cancels any
-existing trade offer they had made.
+The other player accepts the trade offer using the trade accept event.
 
 =item * End turn
 
-If a player's turn ends, all offers are cancelled.
+If a player's turn ends, all outstanding trade offers are cancelled.
 
 =back
 
 Here is an example trade between player 1 and player 2:
 
-  "O":{"P1":{"B":-2,"W":1},"P2":{"B":2,"W":-1}, "UUID":"1234-56789-01234"},
-  "A":{"P2":{"UUID":"1234-56789-01234"}},
-  "T":{"P1":{"B":-2,"W":1},"P3":{"B":2,"W":-1}, "UUID":"1234-56789-01234"},
+  "TO":{"player":"1", "resources":{{"B":-2,"W":1},"2":{"B":2,"W":-1}}, "uuid":"1234-56789-01234"},
+  "TA":{"player":"2", "uuid":"1234-56789-01234"},
+  "TR":{"resources":{"1":{"B":-2,"W":1},"3":{"B":2,"W":-1}}},
 
 The exchange begins with a Trade offer from player 1 for 1 wool in exchange for
 2 brick to player 2. Player 2 accepts the offer, and this triggers the Trade
-action.
+resources event.
 
-Trades can be offered to more than one person at time, here the same offer is
-provided to players 2 and 4:
-
-  "O":{"P1":{"B":-2,"W":1},
-       "?":{"P2":{"B":2,"W":-1},
-            "P4":{"B":2,"W":-1}},
-       "UUID":"1234-56789-01234"
-      },
-
-Because A&R notation has to balance, we represent the "other side" of the trade
-with the unknown player C<?>. This is a key to a dictionary of player names
-and the details of the offer. This makes it possible to offer a single trade to
-one or more players at a time.
-
-=head2 Asset and Resources Notation (A&R Notation)
-
-A&R Notation records which assets or resources and in what quantity are being
-traded by players with the bank or with each other.
-
-A&R uses the asset or resource code as the key and the value as the quantity.
-Both quantities gained and lost are listed. So a trade between player 1 and
-player 2 for 2 lumber for a wool looks like:
-
-  {
-    "P1":{"L":-2,"W":1},
-    "P2":{"L":2,"W":-1 }
-  }
-
-The implication of this notation is that all resources must balance. For trades
-with the bank, C<B> represents the bank:
-
-  {
-    "P1":{"G":-4,"B":1},
-    "B":{"G":4,"B":-1}
-  }
-
-A&R Notation isn't just for trades. It's used for gains from resource
-production, stealing resources with the robber, conceding resources back to the
-bank and building. For example if player 3 wanted to build a road with 1 brick
-and 1 lumber:
-
-  {
-    "P3":{"R":1,"B":-1,"L":-1},
-    "B":{"R":-1,"B":1,"L":1}
-  }
-
-=head2 Comments and Chat
-
-Comments can be added with the C<#> symbol:
-
-  # "This is a comment"
+=head2 Chat
 
 Player chat uses the event code C<CH>. It provides a key/pair of the player
 name and the chat text. Here's a conversation:
@@ -288,66 +260,50 @@ name and the chat text. Here's a conversation:
   CH {"P1":"Let's do this!"},
   CH {"P2":"You're going to lose again!"}
 
-Comments and chat are not necessary for game notation, but may help with the
+Chat is not necessary for game notation, but may help with the
 implementation of a Catan server using game notation.
 
 =head2 Phases
+
+See the file F<example.json> for an example of CGN notation covering all phases of the game.
 
 =over 4
 
 =item 1 Setup
 
-Setup involves the events add player and define map. This is an example setup
-for a 4 player game:
-
-  PS "Setup"
-  PA "P1"
-  PA "P2"
-  PA "P3"
-  PA "P4"
-  MD { (Tile notation) }
-  PE "Setup"
+Setup involves adding players and defining the map.
 
 =item 2 Deployment
 
-Players can deploy settlements and roads in the deployment phase. Settlements
-must be placed on an unoccupied intersection with no settlement on an adjacent
-intersection. Roads must be placed on lines with one end on the player's
-settlement. Each player gains 2 settlements, 2 roads and resources depending
-on their second settlement placement.
-
-  PS "Deployment"
-  T  {"P1":{"S":2,"R":2},
-      "P2":{"S":2,"R":2},
-      "P3":{"S":2,"R":2},
-      "P4":{"S":2,"R":2},
-      "B":{"S":-8,"R":-8}},
-  R  {"P1":3, "P2":5, "P3":11, "P4":8}
-  SP ["P3","P4","P1","P2"]
-  D  {"P3": {"S":[20 31 19],"R":[[20 31 19], [20 31 31]]} }
-  ...
-  PE "Deployment"
+Players can deploy settlements and roads in the deployment phase according to the rules of Catan. Player 1 always goes first.
 
 =item 3 Play
 
-TBC
+This is the regular Catan play action.
+
+=item 4 End
+
+The game is over as a player has won.
 
 =back
 
-=head2 Example
+=head2 Rounds
 
-See the file F<example.json> for an example of CGN notation. It is not yet
-finished!
+A round is one cycle of every player's turn. The Deployment phase has 2 rounds and the Play phase has as many rounds as required to end the game.
 
 =head1 FAQ
 
 =over 4
 
-=item *
+=item * I<Is CGN case-sensitive?> YES!
 
-I<Is CGN case-sensitive>? No.
+=item * I<Why is there no Road Building event?> There is no need for it. When the Play Development card event occurs with a type of C<RB> that indicates road building is active. The player can then build roads using the build road event.
 
 =back
+
+=head2 Version
+
+0.01
 
 =head2 Author
 
