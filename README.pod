@@ -54,7 +54,7 @@ A tile can have one resource number on it, valid numbers are between 2-6 and 8-1
 
 =head2 Tile Notation
 
-Tile notation is used to define the playing map. Every tile is listed with its coordinates, type and resource number. C<null> represents no resource number. The starter map layout:
+Tile notation is used to define the playing map. Every tile is listed with its coordinates, type and resource number. C<null> represents no resource number. The 4th edition starter map layout:
 
   [
     [0,-3,"HR",null],
