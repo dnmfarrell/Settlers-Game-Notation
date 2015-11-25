@@ -111,7 +111,7 @@ Typical maps will have 4 generic harbors and 1 of every other kind.
 
 =head2 Defining the map
 
-Every tile is listed with its coordinates, type and resource number. C<null> represents no resource number. Harbors are declared at path locations. The 4th edition starter map layout:
+Every tile is listed with its coordinates, type and resource number. C<null> represents no resource number. Harbors are declared at path locations. A starter map layout:
 
   {
     "tiles": [
