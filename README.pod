@@ -2,13 +2,33 @@
 
 =encoding utf8
 
-=head1 Catan Game Notation
+=head1 Settlers Game Notation
 
-This document defines a notation for the game Settlers of Catan, called "Catan Game Notation" (CGN). CGN is represented as JSON and is designed to capture "what happened" for a game of Catan using the base game.
+This document defines a notation for the game island colonization game Settlers, called "Settlers Game Notation" (SGN). SGN is represented as JSON and is designed to capture "what happened" for a game of Settlers using the base game.
 
 =head2 Log
 
-A log of CGN captures the entirety of a game of Catan from setup to end. The log is an array of objects that contain notation describing what happened. See F<example.json> for an entire game log.
+A log of SGN captures the entirety of a game of Settlers from setup to end. The log is an array of Messages (see next section) that contain notation describing what happened. See F<example.json> for an entire game log.
+
+=head2 Messages
+
+Every event in a game of Settlers is described in a message format. A message is a JSON object with the following attributes:
+
+  Name    Value
+  ----------------------------------------------------------------------------
+  uuid    universal unique identifier, used to identify individual game events
+  player  The player # (or "A" for admin if it came from the server)
+  event   The two letter event code (see Events below)
+  value   The value associated with the event code (see Events below)
+
+An example admin message for declaring player 2 has joined the game:
+
+  {
+    "uuid": "1C68D574-937F-11E5-AF19-C9E87C9D2E84",
+    "player": "A",
+    "event": "PA",
+    "value": {"player": "2"},
+  }
 
 =head2 Tiles
 
@@ -32,14 +52,14 @@ This is the same map with the sea tiles represented by tildes (incorrect notatio
         ~~~~  -2,2   -1,2   0,2  ~~~~
            ~~~~   ~~~~   ~~~~  ~~~~
 
+Tile notation is used to define the layout of the board tiles and the location of the robber.
+
 =head2 Tile Types
 
-A tile can be any one of the below
+A tile can be any one of the below:
 
   H   Hills
   D   Desert
-  HR  Harbor Generic
-  HR_ Harbor Specific: B, G, L, O, W
   M   Mountains
   S   Sea
   F   Fields
@@ -51,50 +71,6 @@ A tile can be any one of the below
 A tile can have one resource number on it, valid numbers are between 2-6 and 8-12. There is also a limit on the frequency of resource numbers. These are all the available resource numbers for a basic game:
 
   2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12
-
-=head2 Tile Notation
-
-Tile notation is used to define the playing map. Every tile is listed with its coordinates, type and resource number. C<null> represents no resource number. The 4th edition starter map layout:
-
-  [
-    [0,-3,"HR",null],
-    [1,-3,"S",null],
-    [2,-3,"HRW",null],
-    [3,-3,"S",null],
-    [3,-2,"HR",null],
-    [3,-1,"S",null],
-    [3,0,"HRG",null],
-    [2,1,"S",null],
-    [1,2,"HRB",null],
-    [0,3,"S",null],
-    [-1,3,"HRL",null],
-    [-2,3,"S",null],
-    [-3,3,"HR",null],
-    [-3,2,"S",null],
-    [-3,1,"HR",null],
-    [-3,0,"S",null],
-    [-2,-1,"HRO",null],
-    [-1,-2,"S",null],
-    [0,-2,"FO",11],
-    [1,-2,"P",12],
-    [2,-2,"F",9],
-    [2,-1,"P",10],
-    [2,0,"F",8],
-    [1,1,"M",3],
-    [0,2,"FO",6],
-    [-1,2,"F",2],
-    [-2,2,"M",5],
-    [-2,1,"H",8],
-    [-2,0,"D",null],
-    [-1,-1,"H",4],
-    [0,-1,"M",6],
-    [1,-1,"H",5],
-    [1,0,"FO",4],
-    [0,1,"P",9],
-    [-1,1,"P",10],
-    [-1,0,"FO",3],
-    [0,0,"F",11]
-  ]
 
 =head2 Intersections
 
@@ -110,11 +86,85 @@ Intersections represent a point between 3 tile locations in a clockwise order. I
                  [[0,1],[-1,1],[0,0]]
 
 
+Intersections are used to define the location of settlements and cities.
+
 =head2 Paths
 
 Paths are lines between contiguous intersections and are represented as an array of intersections. Each path must have at least two intersections:
 
   [ [[0,0],[-1,1],[-1,0]], [[0,1],[-1,1],[0,0]] ]
+
+Paths are used to define where harbors and roads are placed.
+
+=head2 Harbors
+
+Harbors are placed on paths adjacent to sea tiles. There are 6 harbor types:
+
+  HR  - Generic Harbor
+  HRB - Brick Harbor
+  HRG - Grain Harbor
+  HRL - Lumber Harbor
+  HRO - Ore Harbor
+  HRW - Wool Harbor
+
+Typical maps will have 4 generic harbors and 1 of every other kind.
+
+=head2 Defining the map
+
+Every tile is listed with its coordinates, type and resource number. C<null> represents no resource number. Harbors are declared at path locations. The 4th edition starter map layout:
+
+  {
+    "tiles": [
+      [0,-3,"S",null],
+      [1,-3,"S",null],
+      [2,-3,"S",null],
+      [3,-3,"S",null],
+      [3,-2,"S",null],
+      [3,-1,"S",null],
+      [3,0,"S",null],
+      [2,1,"S",null],
+      [1,2,"S",null],
+      [0,3,"S",null],
+      [-1,3,"S",null],
+      [-2,3,"S",null],
+      [-3,3,"S",null],
+      [-3,2,"S",null],
+      [-3,1,"S",null],
+      [-3,0,"S",null],
+      [-2,-1,"S",null],
+      [-1,-2,"S",null],
+      [0,-2,"FO",11],
+      [1,-2,"P",12],
+      [2,-2,"F",9],
+      [2,-1,"P",10],
+      [2,0,"F",8],
+      [1,1,"M",3],
+      [0,2,"FO",6],
+      [-1,2,"F",2],
+      [-2,2,"M",5],
+      [-2,1,"H",8],
+      [-2,0,"D",null],
+      [-1,-1,"H",4],
+      [0,-1,"M",6],
+      [1,-1,"H",5],
+      [1,0,"FO",4],
+      [0,1,"P",9],
+      [-1,1,"P",10],
+      [-1,0,"FO",3],
+      [0,0,"F",11]
+    ],
+    "harbors": [
+      [[[0,-3],[0,-2],[-1,-2]],  [[1,-3],[0,-2],[0,-3]]],   "HR"],
+      [[[2,-3],[1,-2],[1,-3]],   [[2,-3],[2,-2],[1,-2]]],   "HRW"],
+      [[[3,-2],[2,-1],[2,-2]],   [[3,-2],[3,-1],[2,-1]]],   "HR"],
+      [[[3,-1],[3,0],[2,0]],     [[3,0],[2,1],[2,0]]],      "HR"],
+      [[[2,1],[1,2],[1,1]],      [[1,1],[1,2],[0,2]]],      "HRB"],
+      [[[0,2],[-1,3],[-1,2]],    [[-1,2],[-1,3],[-2,3]]],   "HRL"],
+      [[[-2,2],[-2,3],[-3,3]],   [[-2,2],[-3,-3],[-3,2]]],  "HR"],
+      [[[-2,1],[-3,2],[-3,1]],   [[-2,0],[-2,1],[-3,1]]],   "HRG"],
+      [[[-1,-1],[-2,0],[-2,-1]], [[-1,-2],[-1,-1],[-2,-1]]],"HRO"]
+    ],
+  }
 
 =head2 Resources
 
@@ -132,8 +182,7 @@ There are 5 types of resources:
 
 Resources notation records which resources and in what quantity are being traded by players with the bank or with each other.
 
-It uses the resource code as the key and the value as the quantity. Both quantities gained and lost are listed. So a trade between player 1 and
-player 2 for 2 lumber for a wool looks like:
+It uses the resource code as the key and the value as the quantity. Both quantities gained and lost are listed. So a trade between player 1 and player 2 for 2 lumber for a wool looks like:
 
   {
     "1":{"L":-2,"W":1},
@@ -152,8 +201,7 @@ bank.
 
 =head2 Assets
 
-Players may accumulate these throughout the game. There are four normal and two
-special types:
+Players may accumulate these throughout the game. There are four normal and two special types:
 
   Code  Name              How to get it
   ---------------------------------------------------------
@@ -176,7 +224,7 @@ There are 5 types of development cards:
 
 =head2 Events
 
-Events are the things which drive the game: player actions, dice rolls etc. Every entry in CGN is an event, consisting of an event code and a JSON value. Refer to F<example.json> for examples of these events in CGN.
+Events are the things which drive the game: player actions, dice rolls etc. Every entry in SGN is an event, consisting of an event code and a JSON value. Refer to F<example.json> for examples of these events in SGN.
 
   Code Name                    Value
   ==================================================
@@ -190,7 +238,7 @@ Events are the things which drive the game: player actions, dice rolls etc. Ever
   GO   Game Over               {"player": "#"}
   LA   Largest army            {"player": "#", "strength":#}
   LR   Longest road            {"player": "#"}, "length":#}
-  MD   Map Define              [ <tile notation> ]
+  MD   Map Define              {"tiles":[...], "harbors":[..]}
   MO   Monopoly                {"player": "#", "resources":<resource notation>}
   PA   Player Add              {"player": "#"}
   PD   Play development card   {"player": "#", "type": "KN|MO|RB|VP|YP"}
@@ -214,7 +262,7 @@ Events are the things which drive the game: player actions, dice rolls etc. Ever
 
 =head2 Trading
 
-Trading is a big part of Catan. Players may trade with each other or with the Bank. 
+Trading is a big part of Settlers. Players may trade with each other or with the Bank. 
 
 Bank trades are described using the trade bank event. For example:
 
@@ -255,11 +303,11 @@ Player chat uses the event code C<CH>. It provides a key/pair of the player name
   "CH": {"player":"1", "msg"::"Let's do this!"},
   "CH": {"player":"2", "msg"::"You're going to lose again"},
 
-Chat is not necessary for game notation, but may help with the implementation of a Catan server using game notation. Server or referee chat messages have the player id C<A> for admin.
+Chat is not necessary for game notation, but may help with the implementation of a game server using game notation. Server or referee chat messages have the player id C<A> for admin.
 
 =head2 Phases
 
-See the file F<example.json> for an example of CGN notation covering all phases of the game.
+See the file F<example.json> for an example of SGN notation covering all phases of the game.
 
 =over 4
 
@@ -269,11 +317,11 @@ Setup involves adding players and defining the map.
 
 =item 2 Deployment
 
-Players can deploy settlements and roads in the deployment phase according to the rules of Catan. Player 1 always goes first.
+Players can deploy settlements and roads in the deployment phase according to the rules of Settlers. Player 1 always goes first.
 
 =item 3 Play
 
-This is the regular Catan play action.
+This is the regular Settlers play action.
 
 =item 4 End
 
@@ -285,11 +333,17 @@ The game is over as a player has won.
 
 A round is one cycle of every player's turn. The Deployment phase has 2 rounds and the Play phase has as many rounds as required to end the game.
 
+=head2 Turns
+
+During the Deployment phase, a player must build a settlement and a road, then their turn ends. No other actions during Deployment are permitted. Player 1 always goes first, then player 2, and so on. When the last player has completed their first Deployment phase turn, the turn sequence then reverses so that the last player immediately gets another Deployment phase turn. Deployment is over when the first player has deployed two settlements and two roads.
+
+During the Play phase, the turn sequence begins with Player 1. They may play a development card. The next action they must take is to roll the dice. After the dice roll has been resolved, they may offer and received trade offers from other players and they can build assets. Once player 1 ends their turn, player 2 will have the next turn and so on.
+
 =head1 FAQ
 
 =over 4
 
-=item * I<Is CGN case-sensitive?> YES!
+=item * I<Is SGN case-sensitive?> YES!
 
 =item * I<Why is there no Road Building event?> There is no need for it. When the Play Development card event occurs with a type of C<RB> that indicates road building is active. The player can then build roads using the build road event.
 
@@ -297,11 +351,25 @@ A round is one cycle of every player's turn. The Deployment phase has 2 rounds a
 
 =head2 See Also
 
-L<Catan-Server|https://github.com/dnmfarrell/Catan-Server> is my attempt to implement a Catan game server using CGN.
+L<Settlers-Game|https://github.com/dnmfarrell/Settlers-Game> is my attempt to implement a Settlers game class using SGN.
+
+L<Pioneers|http://pio.sourceforge.net/> an open source implementation of the island colonization game.
+
+L<Catan|http://playcatan.com> the official website for Settlers of Catan.
 
 =head2 Version
 
-0.01
+0.02
+
+=head2 Changes
+
+=head3 0.02 2015-11-25
+
+Ports are declared on paths instead of tiles. SGN messages have event type, value, sender and UUID attributes.
+
+=head3 0.01 2015-11-20
+
+Initial release
 
 =head2 Author
 
