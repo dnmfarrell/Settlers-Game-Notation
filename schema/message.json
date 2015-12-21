@@ -1,0 +1,322 @@
+{
+  "id": "https://github.com/dnmfarrell/Settlers-Game-Notation/schema.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "tCode": {
+      "type": "string",
+      "enum": ["D", "F", "FO", "H", "M", "P", "S"]
+    },
+    "rNumber": {
+      "type": ["integer", "null"],
+      "minimum": 2,
+      "maximum": 12
+    },
+    "tile": {
+      "type": "array",
+      "minSize": 2,
+      "maxSize": 2,
+      "items": {
+        "type": "integer"
+      }
+    },
+    "intersection": {
+      "type": "array",
+      "minSize": 3,
+      "maxSize": 3,
+      "items": {
+        "$ref": "#/definitions/tile"
+      }
+    },
+    "path": {
+      "type": "array",
+      "minSize": 2,
+      "maxSize": 2,
+      "items": {
+        "$ref": "#/definitions/intersection"
+      }
+    },
+    "hCode": {
+      "type": "string",
+      "enum": ["HR", "HRB", "HRG", "HRL", "HRO", "HRW"]
+    },
+    "tiles": {
+      "type": "array",
+      "minSize": 37,
+      "items": {
+        "type": "object",
+        "allOf": [{
+          "$ref": "#/definitions/tile"
+        }, {
+          "$ref": "#/definitions/tile"
+        }, {
+          "$ref": "#/definitions/tile"
+        }]
+      }
+    },
+    "harbors": {
+      "type": "array",
+      "minSize": 37,
+      "items": {
+        "type": "object",
+        "allOf": [{
+          "$ref": "#/definitions/path"
+        }, {
+          "$ref": "#/definitions/hCode"
+        }]
+      }
+    },
+    "resources": {
+      "type": "object",
+      "properties": {
+        "player": {
+          "type": "string"
+        },
+        "B": {
+          "type": "integer"
+        },
+        "G": {
+          "type": "integer"
+        },
+        "L": {
+          "type": "integer"
+        },
+        "O": {
+          "type": "integer"
+        },
+        "W": {
+          "type": "integer"
+        }
+      }
+    },
+    "cCode": {
+      "type": "string",
+      "enum": ["KN", "MO", "RB", "VP", "YP"]
+    },
+    "message": {
+      "type": "object",
+      "properties": {
+        "uuid": {
+          "type": "string"
+        },
+        "player": {
+          "type": "string"
+        },
+        "batch": {
+          "type": "array",
+          "minSize": 2,
+          "maxSize": 2,
+          "items": {
+            "type": "number"
+          }
+        },
+        "required": ["uuid", "player"]
+      }
+    }
+  },
+  "type":"object",
+  "allOf": [
+    { "$ref": "#/definitions/message" },
+    {
+      "anyOf":[
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        },
+        {
+          "properties": {
+            "event": "",
+            "value": {}
+          }
+        }
+      ]
+    }
+  ]
+}

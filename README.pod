@@ -4,24 +4,41 @@
 
 =head1 Settlers Game Notation
 
-This document defines a notation for the game island colonization game Settlers, called "Settlers Game Notation" (SGN). SGN is represented as JSON and is designed to capture "what happened" for a game of Settlers using the base game.
+This document defines a notation for the game island colonization game Settlers, called "Settlers Game Notation" (SGN). SGN is represented as JSON and is designed to capture "what happened" for a game of Settlers.
 
-=head2 Log
+=head2 Goal
 
-A log of SGN captures the entirety of a game of Settlers from setup to end. The log is an array of Messages (see next section) that contain notation describing what happened. See F<example.json> for an entire game log.
+As far as this author is aware, there is no formal, public and free notation for Settlers. This document aims to establish a common language for recording games of Settlers that can be used to implement Settlers software components like games, clients, servers and AI.
+
+=head2 Status
+
+This is a working draft of the SGN spec, and all feedback is welcome. The spec is expected to be finalized in the first quarter of 2016.
+
+=head2 JSON Schema
+
+The F<schema/message.json> file is a draft schema for an SGN message (work-in-progress).
+
+=head2 Examples
+
+Examples of SGN will be available in the F<examples/> directory.
+
+=head2 Definition
+
+A valid SGN document is an array of Messages. The idea is to capture the entirety of a game of Settlers from setup to end. The order of messages is always sequential: an SGN document could describe just the game setup for example. But it couldn't describe the deployment phase unless the setup phase is also defined earlier in the same document.
 
 =head2 Messages
 
-Every event in a game of Settlers is described in a message format. A message is a JSON object with the following attributes:
+Every event in a game of Settlers is described in a message format. A message is a JSON object with the following properties:
 
   Name    Value
-  ----------------------------------------------------------------------------
-  uuid    universal unique identifier, used to identify individual game events
+  ------------------------------------------------------------------------------
+  uuid    Universally Unique IDentifier, used to identify individual game events
   player  The player # (or "A" for admin if it came from the server)
   event   The two letter event code (see Events below)
   value   The value associated with the event code (see Events below)
+  batch   The sequence number of the message e.g. message 1 of 2 is: [1,2]
 
-An example admin message for declaring player 2 has joined the game:
+C<batch> is an optional property. An example admin message for declaring player 2 has joined the game:
 
   {
     "uuid": "1C68D574-937F-11E5-AF19-C9E87C9D2E84",
@@ -30,9 +47,28 @@ An example admin message for declaring player 2 has joined the game:
     "value": {"player": "2"},
   }
 
-=head2 Tiles
+Here is a batch of two messages ending the round and the deployment phase:
 
-All tiles are numbered (including sea tiles), using the axial (trapezoidal) coordinate system:
+  {
+    "uuid": "1C68D574-937F-11E5-AF19-C9E87C9D2E84",
+    "player": "A",
+    "event": "RE",
+    "value": {"round":2},
+    "batch": [1,2]
+  }
+  {
+    "uuid": "1C68D574-937F-11E5-AF19-C9E87C9D2E84",
+    "player": "A",
+    "event": "PE",
+    "value": {"phase": "Deployment"},
+    "batch": [2,2]
+  }
+
+Batching is useful for implementation: a client doesn't have to redraw the screen until it has finished processing an entire batch of messages, rather than redrawing the screen everytime it processes a single message.
+
+=head2 Hexes
+
+All hexes (tiles) are numbered, including sea tiles, using the axial (trapezoidal) coordinate system:
 
              0,-3  1,-3  2,-3   3,-3
          -1,-2  0,-2  1,-2   2,-2   3,-2
@@ -52,19 +88,21 @@ This is the same map with the sea tiles represented by tildes (incorrect notatio
         ~~~~  -2,2   -1,2   0,2  ~~~~
            ~~~~   ~~~~   ~~~~  ~~~~
 
-Tile notation is used to define the layout of the board tiles and the location of the robber.
+Hex notation is used to define the layout of the board tiles and the location of the robber.
 
 =head2 Tile Types
 
 A tile can be any one of the below:
 
-  H   Hills
-  D   Desert
-  M   Mountains
-  S   Sea
-  F   Fields
-  FO  Forest
-  P   Pastures
+  Code Type
+  --------------
+  H    Hills
+  D    Desert
+  M    Mountains
+  S    Sea
+  F    Fields
+  FO   Forest
+  P    Pastures
 
 =head2 Resource Number
 
@@ -72,9 +110,19 @@ A tile can have one resource number on it, valid numbers are between 2-6 and 8-1
 
   2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12
 
+=head2 Tile Notation
+
+A tile is defined by its hex coordinates, type code and resource number. This is a central desert tile:
+
+  {
+    tile: [0,0],
+    tCode: "D",
+    "rNumber": null
+  }
+
 =head2 Intersections
 
-Intersections represent a point between 3 tile locations in a clockwise order. Intersections are represented as an array of 3 tile locations. E.g. the six intersections of the center tile on the starter map layout:
+Intersections represent a point between 3 hex locations in a clockwise order. Intersections are represented as an array of 3 hex locations. E.g. the six intersections of the center hex on the starter map layout:
 
                  [[0,-1],[0,0],[-1,0]]
                          /   \
@@ -100,70 +148,71 @@ Paths are used to define where harbors and roads are placed.
 
 Harbors are placed on paths adjacent to sea tiles. There are 6 harbor types:
 
-  HR  - Generic Harbor
-  HRB - Brick Harbor
-  HRG - Grain Harbor
-  HRL - Lumber Harbor
-  HRO - Ore Harbor
-  HRW - Wool Harbor
+  Code  Type
+  --------------------
+  HR    Generic Harbor
+  HRB   Brick Harbor
+  HRG   Grain Harbor
+  HRL   Lumber Harbor
+  HRO   Ore Harbor
+  HRW   Wool Harbor
 
 Typical maps will have 4 generic harbors and 1 of every other kind.
 
 =head2 Defining the map
 
-Every tile is listed with its coordinates, type and resource number. C<null> represents no resource number. Harbors are declared at path locations. A starter map layout:
+Every tile is listed with its coordinates, type code and resource number. C<null> represents no resource number. Harbors are declared at path locations with the harbor type code. A starter map layout:
 
   {
     "tiles": [
-      [0,-3,"S",null],
-      [1,-3,"S",null],
-      [2,-3,"S",null],
-      [3,-3,"S",null],
-      [3,-2,"S",null],
-      [3,-1,"S",null],
-      [3,0,"S",null],
-      [2,1,"S",null],
-      [1,2,"S",null],
-      [0,3,"S",null],
-      [-1,3,"S",null],
-      [-2,3,"S",null],
-      [-3,3,"S",null],
-      [-3,2,"S",null],
-      [-3,1,"S",null],
-      [-3,0,"S",null],
-      [-2,-1,"S",null],
-      [-1,-2,"S",null],
-      [0,-2,"FO",11],
-      [1,-2,"P",12],
-      [2,-2,"F",9],
-      [2,-1,"P",10],
-      [2,0,"F",8],
-      [1,1,"M",3],
-      [0,2,"FO",6],
-      [-1,2,"F",2],
-      [-2,2,"M",5],
-      [-2,1,"H",8],
-      [-2,0,"D",null],
-      [-1,-1,"H",4],
-      [0,-1,"M",6],
-      [1,-1,"H",5],
-      [1,0,"FO",4],
-      [0,1,"P",9],
-      [-1,1,"P",10],
-      [-1,0,"FO",3],
-      [0,0,"F",11]
+      {"tile":[0,-3],"tCode":"S","rNumber":null},
+      {"tile":[1,-3],"tCode":"S","rNumber":null},
+      {"tile":[2,-3],"tCode":"S","rNumber":null},
+      {"tile":[3,-3],"tCode":"S","rNumber":null},
+      {"tile":[3,-2],"tCode":"S","rNumber":null},
+      {"tile":[3,-1],"tCode":"S","rNumber":null},
+      {"tile":[3,0],"tCode":"S","rNumber":null},
+      {"tile":[2,1],"tCode":"S","rNumber":null},
+      {"tile":[1,2],"tCode":"S","rNumber":null},
+      {"tile":[0,3],"tCode":"S","rNumber":null},
+      {"tile":[-1,3],"tCode":"S","rNumber":null},
+      {"tile":[-2,3],"tCode":"S","rNumber":null},
+      {"tile":[-3,3],"tCode":"S","rNumber":null},
+      {"tile":[-3,2],"tCode":"S","rNumber":null},
+      {"tile":[-3,1],"tCode":"S","rNumber":null},
+      {"tile":[-3,0],"tCode":"S","rNumber":null},
+      {"tile":[-2,-1],"tCode":"S","rNumber":null},
+      {"tile":[-1,-2],"tCode":"S","rNumber":null},
+      {"tile":[1,-2],"tCode":"P","rNumber":12},
+      {"tile":[2,-2],"tCode":"F","rNumber":9},
+      {"tile":[2,-1],"tCode":"P","rNumber":10},
+      {"tile":[2,0],"tCode":"F","rNumber":8},
+      {"tile":[1,1],"tCode":"M","rNumber":3},
+      {"tile":[0,2],"tCode":"FO","rNumber":6},
+      {"tile":[-1,2],"tCode":"F","rNumber":2},
+      {"tile":[-2,2],"tCode":"M","rNumber":5},
+      {"tile":[-2,1],"tCode":"H","rNumber":8},
+      {"tile":[-2,0],"tCode":"D",null},
+      {"tile":[-1,-1],"tCode":"H","rNumber":4},
+      {"tile":[0,-1],"tCode":"M","rNumber":6},
+      {"tile":[1,-1],"tCode":"H","rNumber":5},
+      {"tile":[1,0],"tCode":"FO","rNumber":4},
+      {"tile":[0,1],"tCode":"P","rNumber":9},
+      {"tile":[-1,1],"tCode":"P","rNumber":10},
+      {"tile":[-1,0],"tCode":"FO","rNumber":3},
+      {"tile":[0,0],"tCode":"F","rNumber":11}
     ],
     "harbors": [
-      [[[0,-3],[0,-2],[-1,-2]],  [[1,-3],[0,-2],[0,-3]]],   "HR"],
-      [[[2,-3],[1,-2],[1,-3]],   [[2,-3],[2,-2],[1,-2]]],   "HRW"],
-      [[[3,-2],[2,-1],[2,-2]],   [[3,-2],[3,-1],[2,-1]]],   "HR"],
-      [[[3,-1],[3,0],[2,0]],     [[3,0],[2,1],[2,0]]],      "HR"],
-      [[[2,1],[1,2],[1,1]],      [[1,1],[1,2],[0,2]]],      "HRB"],
-      [[[0,2],[-1,3],[-1,2]],    [[-1,2],[-1,3],[-2,3]]],   "HRL"],
-      [[[-2,2],[-2,3],[-3,3]],   [[-2,2],[-3,3],[-3,2]]],  "HR"],
-      [[[-2,1],[-3,2],[-3,1]],   [[-2,0],[-2,1],[-3,1]]],   "HRG"],
-      [[[-1,-1],[-2,0],[-2,-1]], [[-1,-2],[-1,-1],[-2,-1]]],"HRO"]
-    ],
+      {"path":[[[0,-3],[0,-2],[-1,-2]],  [[1,-3],[0,-2],[0,-3]]],   "hCode": "HR"},
+      {"path":[[[2,-3],[1,-2],[1,-3]],   [[2,-3],[2,-2],[1,-2]]],   "hCode": "HRW"},
+      {"path":[[[3,-2],[2,-1],[2,-2]],   [[3,-2],[3,-1],[2,-1]]],   "hCode": "HR"},
+      {"path":[[[3,-1],[3,0],[2,0]],     [[3,0],[2,1],[2,0]]],      "hCode": "HR"},
+      {"path":[[[2,1],[1,2],[1,1]],      [[1,1],[1,2],[0,2]]],      "hCode": "HRB"},
+      {"path":[[[0,2],[-1,3],[-1,2]],    [[-1,2],[-1,3],[-2,3]]],   "hCode": "HRL"},
+      {"path":[[[-2,2],[-2,3],[-3,3]],   [[-2,2],[-3,3],[-3,2]]],   "hCode": "HR"},
+      {"path":[[[-2,1],[-3,2],[-3,1]],   [[-2,0],[-2,1],[-3,1]]],   "hCode": "HRG"},
+      {"path":[[[-1,-1],[-2,0],[-2,-1]], [[-1,-2],[-1,-1],[-2,-1]]],"hCode": "HRO"}
+    ]
   }
 
 =head2 Resources
@@ -184,17 +233,17 @@ Resources notation records which resources and in what quantity are being traded
 
 It uses the resource code as the key and the value as the quantity. Both quantities gained and lost are listed. So a trade between player 1 and player 2 for 2 lumber for a wool looks like:
 
-  {
-    "1":{"L":-2,"W":1},
-    "2":{"L":2,"W":-1 }
-  }
+  [
+    {"player":"1","L":-2,"W": 1},
+    {"player":"2","L": 2,"W":-1}
+  ]
 
-The implication of this notation is that all resources must balance. For trades with the bank, C<bank> represents the bank:
+The implication of this notation is that all resources must balance. For trades with the bank, C<B> represents the bank. Here is a bank trade by player 2, losing 4 grain to get a brick:
 
-  {
-    "1":{"G":-4,"B":1},
-    "bank":{"G":4,"B":-1}
-  }
+  [
+    {"player":"2",    "G":-4,"B": 1},
+    {"player":"B", "G": 4,"B":-1}
+  ]
 
 Resource notation isn't just for trades. It's used for gains from resource production, stealing resources with the robber and conceding resources back to the
 bank.
@@ -214,7 +263,7 @@ Players may accumulate these throughout the game. There are four normal and two 
 
 There are 5 types of development cards:
 
-  Type  Name
+  Code  Name
   -------------------
   KN    Knight
   MO    Monopoly
@@ -227,46 +276,54 @@ There are 5 types of development cards:
 Events are the things which drive the game: player actions, dice rolls etc. Every entry in SGN is an event, consisting of an event code and a JSON value. Refer to F<example.json> for examples of these events in SGN.
 
   Code Name                    Value
-  ==================================================
-  BC   Build city              {"player": "#", "intersection":<intersection coordinates>}
-  BD   Build development card  {"player": "#", "type": "KN|MO|RB|VP|YP"}
-  BR   Build road              {"player": "#", "path":<path coordinates>}
-  BS   Build settlement        {"player": "#", "intersection":<intersection coordinates>}
-  CH   Chat                    {"player": "#", "msg": "msg text"}
-  CR   Concede resources       {"player": "#", "resources":<resource notation>}
-  DR   Dice roll               {"player": "#", "result":#}
-  GO   Game Over               {"player": "#"}
-  LA   Largest army            {"player": "#", "strength":#}
-  LR   Longest road            {"player": "#"}, "length":#}
+  --------------------------------------------------------------------------------------
+  BC   Build city              {"intersection":<intersection coordinates>}
+  BD   Build development card  {"cCode": "KN|MO|RB|VP|YP"}
+  BR   Build road              {"path":<path coordinates>}
+  BS   Build settlement        {"intersection":<intersection coordinates>}
+  CH   Chat                    {"msg": "msg text"}
+  CR   Concede resources       {"resources":<resource notation>}
+  DR   Dice roll               {"result":#}
+  GO   Game Over               {}
+  LA   Largest army            {"strength":#}
+  LR   Longest road            {"length":#}
   MD   Map Define              {"tiles":[...], "harbors":[..]}
-  MO   Monopoly                {"player": "#", "resources":<resource notation>}
+  MO   Monopoly                {"resources":<resource notation>}
   PA   Player Add              {"player": "#"}
-  PD   Play development card   {"player": "#", "type": "KN|MO|RB|VP|YP"}
+  PD   Play development card   {"code": "KN|MO|RB|VP|YP"}
   PE   Phase End               {"phase": "Setup|Deployment|Play|End"}
   PS   Phase Start             {"phase": "Setup|Deployment|Play|End"}
-  RA   Robber activate         null
-  RD   Robber deactivate       null
+  RA   Robber activate         {}
+  RD   Robber deactivate       {}
   RE   Round End               {"round": #}
-  RM   Robber move             {"player": "#", "tile": <tile coordinates>}
-  RP   Resource Production     { "resources": <resource notation> }
-  RR   Robber rob              { "player":"#", "resources": <resource notation> }
+  RM   Robber move             {"tile": <tile coordinates>}
+  RP   Resource Production     {"resources": <resource notation> }
+  RR   Robber rob              {"resources": <resource notation> }
   RS   Round Start             {"round": #}
-  TA   Trade accept            {"player": "#", "uuid":"#"}
-  TB   Trade bank              {"player": "#", "resources":<resource notation>}
-  TC   Trade cancel            {"player": "#", "uuid":"#"}
-  TE   Turn End                {"player": "#"}
-  TO   Trade offer             {"player": "#", "uuid":"#", "resources":<resource notation>}
-  TR   Trade resources         {"player": "#", "uuid":"#", "resources":<resource notation>}
-  TS   Turn Start              {"player": "#"}
-  YP   Year of plenty          {"player": "#", "resources":<resource notation>}
+  TA   Trade accept            {"uuid":"#"}
+  TB   Trade bank              {"resources":<resource notation>}
+  TC   Trade cancel            {"uuid":"#"}
+  TD   Trade decline           {"uuid":"#"}
+  TE   Turn End                {}
+  TO   Trade offer             {"resources":<resource notation>}
+  TR   Trade resources         {"uuid":"#", "resources":<resource notation>}
+  TS   Turn Start              {}
+  YP   Year of plenty          {"resources":<resource notation>}
 
 =head2 Trading
 
-Trading is a big part of Settlers. Players may trade with each other or with the Bank. 
+Trading is a big part of Settlers. Players may trade with each other or with the Bank.
 
-Bank trades are described using the trade bank event. For example:
+Bank trades are described using the trade bank event. For example, here's a complete bank trade message:
 
-  "TB":{"player":"2", "resources":{"bank":{"B":"-1","O":"4"},"2":{"B":"1","O":"-4"}}
+  {
+    "event": "TB",
+    "value":{
+      "resources":[{"player":"B","B":"-1","O":"4"},{"player":"2","B":"1","O":"-4"}]
+    }
+    "uuid":"#",
+    "player":"2"
+  }
 
 Player trades have two parts: offer and acceptance. A Player may offer a trade to other players with resource notation and a universal unique id (uuid).
 
@@ -278,42 +335,69 @@ The trade offer can be ended with:
 
 The offering player cancels the offer using the trade cancel event.
 
+=item * Trade decline
+
+The receiving player declines the offer using the trade decline event.
+
 =item * Trade accept
 
 The other player accepts the trade offer using the trade accept event.
 
 =item * End turn
 
-If a player's turn ends, all outstanding trade offers are cancelled.
+If a player's turn ends, all outstanding trade offers are cancelled. No Trade Cancel events are issued for this.
 
 =back
 
 Here is an example trade between player 1 and player 2:
 
-  "TO":{"player":"1", "resources":{{"B":-2,"W":1},"2":{"B":2,"W":-1}}, "uuid":"1234-56789-01234"},
-  "TA":{"player":"2", "uuid":"1234-56789-01234"},
-  "TR":{"resources":{"1":{"B":-2,"W":1},"3":{"B":2,"W":-1}}},
+  {
+    "event":"TO",
+    "player":"1",
+    "value": {"resources":[{"player":"1","B":-2,"W":1},{"player":"2","B":2,"W":-1}]},
+    "uuid":"1234-56789-01234"
+  },
+  {
+    "event":"TA",
+    "player":"2",
+    "value": {"uuid":"1234-56789-01234"},
+    "uuid": "#"
+  },
+  {
+    "event":"TR",
+    "player":"A",
+    "value":{"resources":[{"player":"1","B":-2,"W":1},{"player":"3","B":2,"W":-1}]},
+    "uuid": "#"
+  }
 
-The exchange begins with a Trade offer from player 1 for 1 wool in exchange for 2 brick to player 2. Player 2 accepts the offer, and this triggers the Trade resources event.
+The exchange begins with a Trade offer from player 1 for 1 wool in exchange for 2 brick to player 2. Player 2 accepts the offer, and this triggers the Trade event.
 
 =head2 Chat
 
 Player chat uses the event code C<CH>. It provides a key/pair of the player name and the chat text. Here's a conversation:
 
-  "CH": {"player":"1", "msg"::"Let's do this!"},
-  "CH": {"player":"2", "msg"::"You're going to lose again"},
+  {
+    "event": "CH",
+    "player": "1",
+    "uuid": "#",
+    "value":{"msg":"Let's do this!"},
+  },
+  {
+    "event": "CH",
+    "player": "2",
+    "uuid": "#",
+    "value":{"msg":"I'm gonna get you!"},
+  }
 
-Chat is not necessary for game notation, but may help with the implementation of a game server using game notation. Server or referee chat messages have the player id C<A> for admin.
+Chat is not necessary for game notation, but helps with the implementation of a game server using game notation. Server or referee chat messages have the player id C<A> for admin.
 
 =head2 Phases
-
-See the file F<example.json> for an example of SGN notation covering all phases of the game.
 
 =over 4
 
 =item 1 Setup
 
-Setup involves adding players and defining the map.
+Setup involves adding players and defining the map. The first event in every game log should be to start the Setup phase.
 
 =item 2 Deployment
 
@@ -339,13 +423,19 @@ During the Deployment phase, a player must build a settlement and a road, then t
 
 During the Play phase, the turn sequence begins with Player 1. They may play a development card. The next action they must take is to roll the dice. After the dice roll has been resolved, they may offer and received trade offers from other players and they can build assets. Once player 1 ends their turn, player 2 will have the next turn and so on.
 
+=head2 Players
+
+Players are just string identifiers that refer to a player of the game, an administrator/referee or the bank. The examples in this document refer to players by stringified numbers like C<"1">, but this is not necessary. The string must be unique identifier for the player, so it's fine to use a name instead: C<"David">.
+
+Two player names are special and reserved: C<"B"> refers to the banker and C<"A"> refers to the administrator, server or refereee of the game.
+
 =head1 FAQ
 
 =over 4
 
 =item * I<Is SGN case-sensitive?> YES!
 
-=item * I<Why is there no Road Building event?> There is no need for it. When the Play Development card event occurs with a type of C<RB> that indicates road building is active. The player can then build roads using the build road event.
+=item * I<Why is there no Road Building event?> There is no need for it. When the Play Development card event occurs with a type code of C<RB> that indicates road building is active. The player can then build roads using the build road event.
 
 =back
 
@@ -359,13 +449,17 @@ L<Catan|http://playcatan.com> the official website for Settlers of Catan.
 
 =head2 Version
 
-0.02
+0.03
 
 =head2 Changes
 
+=head3 0.03 2015-12-17
+
+Messages can include a batch value. Added the trade decline event. Changed the definition of tiles and harbors to be objects rather than arrays. Resource notation is now an array of objects that include a player property. Removed C<player> from every event value, except for Player Add (it was redundant). Types of things are identified by new names: C<tCodes> for tile codes, C<hCodes> for harbor codes and C<cCodes> for development card codes.
+
 =head3 0.02 2015-11-25
 
-Ports are declared on paths instead of tiles. SGN messages have event type, value, sender and UUID attributes.
+Ports are declared on paths instead of tiles. SGN messages have event code, value, sender and UUID attributes.
 
 =head3 0.01 2015-11-20
 
