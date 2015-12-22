@@ -122,7 +122,7 @@
     "$ref": "#/definitions/message"},
     {"oneOf": [{
       "properties": {
-        "event": "BC",
+        "event": { "pattern": "^BC$" },
         "value": {
           "$ref": "#/definitions/intersection"
         }
@@ -130,7 +130,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "BD",
+        "event": { "pattern": "^BD$" },
         "value": {
           "$ref": "#/definitions/cCode"
         }
@@ -138,7 +138,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "BR",
+        "event": { "pattern": "^BR$" },
         "value": {
           "$ref": "#/definitions/intersection"
         }
@@ -146,7 +146,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "BS",
+        "event": { "pattern": "^BS$" },
         "value": {
           "$ref": "#/definitions/intersection"
         }
@@ -154,7 +154,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "CH",
+        "event": { "pattern": "^CH$" },
         "value": {
           "properties": {
             "msg": {
@@ -167,7 +167,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "CR",
+        "event": { "pattern": "^CR$" },
         "value": {
           "$ref": "#/definitions/resources"
         }
@@ -175,7 +175,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "DR",
+        "event": { "pattern": "^DR$" },
         "value": {
           "properties": {
             "result": {
@@ -188,13 +188,13 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "GO",
+        "event": { "pattern": "^GO$" },
         "value": {}
       },
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "LA",
+        "event": { "pattern": "^LA$" },
         "value": {
           "properties": {
             "strength": {
@@ -207,7 +207,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "LR",
+        "event": { "pattern": "^LR$" },
         "value": {
           "properties": {
             "length": {
@@ -220,7 +220,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "MD",
+        "event": { "pattern": "^MD$" },
         "value": {
           "$ref": "#/definitions/tiles",
           "$ref": "#/definitions/harbors"
@@ -229,7 +229,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "MO",
+        "event": { "pattern": "^MO$" },
         "value": {
           "$ref": "#/definitions/resources"
         }
@@ -237,7 +237,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "PA",
+        "event": { "pattern": "^PA$" },
         "value": {
           "properties": {
             "player": {
@@ -250,7 +250,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "PD",
+        "event": { "pattern": "^PD$" },
         "value": {
           "$ref": "#/definitions/cCode"
         }
@@ -258,7 +258,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "PE",
+        "event": { "pattern": "^PE$" },
         "value": {
           "$ref": "#/definitions/phase"
         }
@@ -266,7 +266,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "PS",
+        "event": { "pattern": "^PS$" },
         "value": {
           "$ref": "#/definitions/phase"
         }
@@ -274,19 +274,19 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "RA",
+        "event": { "pattern": "^RA$" },
         "value": {}
       },
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "RD",
+        "event": { "pattern": "^RD$" },
         "value": {}
       },
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "RE",
+        "event": { "pattern": "^RE$" },
         "value": {
           "properties": {
             "round": {
@@ -299,7 +299,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "RS",
+        "event": { "pattern": "^RS$" },
         "value": {
           "properties": {
             "round": {
@@ -312,7 +312,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "RM",
+        "event": { "pattern": "^RM$" },
         "value": {
           "$ref": "#/definitions/tile"
         }
@@ -320,7 +320,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "RP",
+        "event": { "pattern": "^RP$" },
         "value": {
           "$ref": "#/definitions/resources"
         }
@@ -328,7 +328,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "RR",
+        "event": { "pattern": "^RR$" },
         "value": {
           "$ref": "#/definitions/resources"
         }
@@ -336,7 +336,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "TA",
+        "event": { "pattern": "^TA$" },
         "value": {
           "properties": {
             "uuid": {
@@ -349,7 +349,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "TD",
+        "event": { "pattern": "^TD$" },
         "value": {
           "properties": {
             "uuid": {
@@ -362,7 +362,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "TC",
+        "event": { "pattern": "^TC$" },
         "value": {
           "properties": {
             "uuid": {
@@ -375,7 +375,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "TB",
+        "event": { "pattern": "^TB$" },
         "value": {
           "$ref": "#/definitions/resources"
         }
@@ -383,7 +383,7 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "TO",
+        "event": { "pattern": "^TO$" },
         "value": {
           "$ref": "#/definitions/resources"
         }
@@ -391,19 +391,19 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "TE",
+        "event": { "pattern": "^TE$" },
         "value": {}
       },
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "TS",
+        "event": { "pattern": "^TS$" },
         "value": {}
       },
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "TR",
+        "event": { "pattern": "^TR$" },
         "value": {
           "allOf": [{
             "$ref": "#/definitions/resources"
@@ -420,17 +420,9 @@
       "required": ["event", "value"]
     }, {
       "properties": {
-        "event": "YP",
+        "event": { "pattern": "^YP$" },
         "value": {
           "$ref": "#/definitions/resources"
-        }
-      },
-      "required": ["event", "value"]
-    }, {
-      "properties": {
-        "event": "",
-        "value": {
-          "$ref": "#/definitions/"
         }
       },
       "required": ["event", "value"]
