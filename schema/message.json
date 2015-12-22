@@ -55,7 +55,7 @@
     },
     "harbors": {
       "type": "array",
-      "minSize": 37,
+      "minSize": 8,
       "items": {
         "type": "object",
         "allOf": [{
@@ -92,6 +92,10 @@
       "type": "string",
       "enum": ["KN", "MO", "RB", "VP", "YP"]
     },
+    "phase": {
+      "type": "string",
+      "enum": ["Setup", "Deployment", "Play", "End"]
+    },
     "message": {
       "type": "object",
       "properties": {
@@ -113,210 +117,324 @@
       }
     }
   },
-  "type":"object",
-  "allOf": [
-    { "$ref": "#/definitions/message" },
-    {
-      "anyOf":[
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
-        },
-        {
-          "properties": {
-            "event": "",
-            "value": {}
-          }
+  "type": "object",
+  "allOf": [{
+    "$ref": "#/definitions/message"
+  }, {
+    "anyOf": [{
+      "properties": {
+        "event": "BC",
+        "value": {
+          "$ref": "#/definitions/intersection"
         }
-      ]
-    }
-  ]
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "BD",
+        "value": {
+          "$ref": "#/definitions/cCode"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "BR",
+        "value": {
+          "$ref": "#/definitions/intersection"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "BS",
+        "value": {
+          "$ref": "#/definitions/intersection"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "CH",
+        "value": {
+          "properties": {
+            "msg": {
+              "type": "string"
+            }
+          },
+          "required": ["msg"]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "CR",
+        "value": {
+          "$ref": "#/definitions/resources"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "DR",
+        "value": {
+          "properties": {
+            "result": {
+              "type": "integer"
+            }
+          },
+          "required": ["result"]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "GO",
+        "value": {}
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "LA",
+        "value": {
+          "properties": {
+            "strength": {
+              "type": "integer"
+            }
+          },
+          "required": ["strength"]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "LR",
+        "value": {
+          "properties": {
+            "length": {
+              "type": "integer"
+            }
+          },
+          "required": ["length"]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "MD",
+        "value": {
+          "$ref": "#/definitions/tiles",
+          "$ref": "#/definitions/harbors"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "MO",
+        "value": {
+          "$ref": "#/definitions/resources"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "PA",
+        "value": {
+          "properties": {
+            "player": {
+              "type": "string"
+            }
+          },
+          "required": ["player"]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "PD",
+        "value": {
+          "$ref": "#/definitions/cCode"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "PE",
+        "value": {
+          "$ref": "#/definitions/phase"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "PS",
+        "value": {
+          "$ref": "#/definitions/phase"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "RA",
+        "value": {}
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "RD",
+        "value": {}
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "RE",
+        "value": {
+          "properties": {
+            "round": {
+              "type": "integer"
+            }
+          },
+          "required": ["round"]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "RS",
+        "value": {
+          "properties": {
+            "round": {
+              "type": "integer"
+            }
+          },
+          "required": ["round"]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "RM",
+        "value": {
+          "$ref": "#/definitions/tile"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "RP",
+        "value": {
+          "$ref": "#/definitions/resources"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "RR",
+        "value": {
+          "$ref": "#/definitions/resources"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "TA",
+        "value": {
+          "properties": {
+            "uuid": {
+              "type": "string"
+            }
+          },
+          "required": ["round"]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "TD",
+        "value": {
+          "properties": {
+            "uuid": {
+              "type": "string"
+            }
+          },
+          "required": ["round"]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "TC",
+        "value": {
+          "properties": {
+            "uuid": {
+              "type": "string"
+            }
+          },
+          "required": ["round"]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "TB",
+        "value": {
+          "$ref": "#/definitions/resources"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "TO",
+        "value": {
+          "$ref": "#/definitions/resources"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "TE",
+        "value": {}
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "TS",
+        "value": {}
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "TR",
+        "value": {
+          "allOf": [{
+            "$ref": "#/definitions/resources"
+          }, {
+            "properties": {
+              "uuid": {
+                "type": "string"
+              }
+            },
+            "required": ["uuid"]
+          }]
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "YP",
+        "value": {
+          "$ref": "#/definitions/resources"
+        }
+      },
+      "required": ["event", "value"]
+    }, {
+      "properties": {
+        "event": "",
+        "value": {
+          "$ref": "#/definitions/"
+        }
+      },
+      "required": ["event", "value"]
+    }]
+  }]
 }
