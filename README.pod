@@ -16,7 +16,7 @@ This is a working draft of the SGN spec, and all feedback is welcome. The spec i
 
 =head2 JSON Schema
 
-The F<schema/message.json> file is a draft schema for an SGN message (work-in-progress).
+The F<schema/message.json> file is a draft schema for an SGN message, and F<schema/log.json> defines a log of SGN.
 
 =head2 Examples
 
