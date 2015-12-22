@@ -1,5 +1,5 @@
 {
-  "id": "https://github.com/dnmfarrell/Settlers-Game-Notation/schema.json",
+  "id": "https://github.com/dnmfarrell/Settlers-Game-Notation/schema/message.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {
     "tCode": {
@@ -119,9 +119,8 @@
   },
   "type": "object",
   "allOf": [{
-    "$ref": "#/definitions/message"
-  }, {
-    "anyOf": [{
+    "$ref": "#/definitions/message"},
+    {"oneOf": [{
       "properties": {
         "event": "BC",
         "value": {
@@ -435,6 +434,6 @@
         }
       },
       "required": ["event", "value"]
-    }]
-  }]
+    }]}
+  ]
 }

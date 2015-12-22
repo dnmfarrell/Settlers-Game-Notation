@@ -1,0 +1,6 @@
+{
+  "id": "https://github.com/dnmfarrell/Settlers-Game-Notation/schema/log.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type":"array",
+  "items": { "$ref": "message.json" }
+}
