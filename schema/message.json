@@ -66,25 +66,28 @@
       }
     },
     "resources": {
-      "type": "object",
-      "properties": {
-        "player": {
-          "type": "string"
-        },
-        "B": {
-          "type": "integer"
-        },
-        "G": {
-          "type": "integer"
-        },
-        "L": {
-          "type": "integer"
-        },
-        "O": {
-          "type": "integer"
-        },
-        "W": {
-          "type": "integer"
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player": {
+            "type": "string"
+          },
+          "B": {
+            "type": "integer"
+          },
+          "G": {
+            "type": "integer"
+          },
+          "L": {
+            "type": "integer"
+          },
+          "O": {
+            "type": "integer"
+          },
+          "W": {
+            "type": "integer"
+          }
         }
       }
     },
@@ -112,19 +115,23 @@
           "items": {
             "type": "number"
           }
-        },
-        "required": ["uuid", "player"]
-      }
+        }
+      },
+      "required": ["uuid", "player"]
     }
   },
   "type": "object",
   "allOf": [{
     "$ref": "#/definitions/message"},
-    {"oneOf": [{
+    {"anyOf": [{
       "properties": {
         "event": { "pattern": "^BC$" },
         "value": {
-          "$ref": "#/definitions/intersection"
+          "type": "object",
+          "properties": {
+            "intersection": {"$ref": "#/definitions/intersection" }
+          },
+          "required": ["intersection"]
         }
       },
       "required": ["event", "value"]
@@ -132,7 +139,11 @@
       "properties": {
         "event": { "pattern": "^BD$" },
         "value": {
-          "$ref": "#/definitions/cCode"
+          "type": "object",
+          "properties": {
+            "cCode": {"$ref": "#/definitions/cCode" }
+          },
+          "required": ["cCode"]
         }
       },
       "required": ["event", "value"]
@@ -140,7 +151,11 @@
       "properties": {
         "event": { "pattern": "^BR$" },
         "value": {
-          "$ref": "#/definitions/intersection"
+          "type": "object",
+          "properties": {
+            "path": {"$ref": "#/definitions/path" }
+          },
+          "required": ["path"]
         }
       },
       "required": ["event", "value"]
@@ -148,7 +163,11 @@
       "properties": {
         "event": { "pattern": "^BS$" },
         "value": {
-          "$ref": "#/definitions/intersection"
+          "type": "object",
+          "properties": {
+            "intersection": {"$ref": "#/definitions/intersection" }
+          },
+          "required": ["intersection"]
         }
       },
       "required": ["event", "value"]
@@ -169,7 +188,11 @@
       "properties": {
         "event": { "pattern": "^CR$" },
         "value": {
-          "$ref": "#/definitions/resources"
+          "type": "object",
+          "properties": {
+            "resources": {"$ref": "#/definitions/resources" }
+          },
+          "required": ["resources"]
         }
       },
       "required": ["event", "value"]
@@ -179,7 +202,9 @@
         "value": {
           "properties": {
             "result": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 12
             }
           },
           "required": ["result"]
@@ -231,7 +256,11 @@
       "properties": {
         "event": { "pattern": "^MO$" },
         "value": {
-          "$ref": "#/definitions/resources"
+          "type": "object",
+          "properties": {
+            "resources": {"$ref": "#/definitions/resources" }
+          },
+          "required": ["resources"]
         }
       },
       "required": ["event", "value"]
@@ -252,7 +281,11 @@
       "properties": {
         "event": { "pattern": "^PD$" },
         "value": {
-          "$ref": "#/definitions/cCode"
+          "type": "object",
+          "properties": {
+            "cCode": {"$ref": "#/definitions/cCode" }
+          },
+          "required": ["cCode"]
         }
       },
       "required": ["event", "value"]
@@ -260,7 +293,11 @@
       "properties": {
         "event": { "pattern": "^PE$" },
         "value": {
-          "$ref": "#/definitions/phase"
+          "type": "object",
+          "properties": {
+            "phase": {"$ref": "#/definitions/phase" }
+          },
+          "required": ["phase"]
         }
       },
       "required": ["event", "value"]
@@ -268,7 +305,11 @@
       "properties": {
         "event": { "pattern": "^PS$" },
         "value": {
-          "$ref": "#/definitions/phase"
+          "type": "object",
+          "properties": {
+            "phase": {"$ref": "#/definitions/phase" }
+          },
+          "required": ["phase"]
         }
       },
       "required": ["event", "value"]
@@ -290,7 +331,8 @@
         "value": {
           "properties": {
             "round": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             }
           },
           "required": ["round"]
@@ -303,7 +345,8 @@
         "value": {
           "properties": {
             "round": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             }
           },
           "required": ["round"]
@@ -314,7 +357,11 @@
       "properties": {
         "event": { "pattern": "^RM$" },
         "value": {
-          "$ref": "#/definitions/tile"
+          "type": "object",
+          "properties": {
+            "tile": {"$ref": "#/definitions/tile" }
+          },
+          "required": ["tile"]
         }
       },
       "required": ["event", "value"]
@@ -322,7 +369,11 @@
       "properties": {
         "event": { "pattern": "^RP$" },
         "value": {
-          "$ref": "#/definitions/resources"
+          "type": "object",
+          "properties": {
+            "resources": {"$ref": "#/definitions/resources" }
+          },
+          "required": ["resources"]
         }
       },
       "required": ["event", "value"]
@@ -330,7 +381,11 @@
       "properties": {
         "event": { "pattern": "^RR$" },
         "value": {
-          "$ref": "#/definitions/resources"
+          "type": "object",
+          "properties": {
+            "resources": {"$ref": "#/definitions/resources" }
+          },
+          "required": ["resources"]
         }
       },
       "required": ["event", "value"]
@@ -343,7 +398,7 @@
               "type": "string"
             }
           },
-          "required": ["round"]
+          "required": ["uuid"]
         }
       },
       "required": ["event", "value"]
@@ -356,7 +411,7 @@
               "type": "string"
             }
           },
-          "required": ["round"]
+          "required": ["uuid"]
         }
       },
       "required": ["event", "value"]
@@ -369,7 +424,7 @@
               "type": "string"
             }
           },
-          "required": ["round"]
+          "required": ["uuid"]
         }
       },
       "required": ["event", "value"]
@@ -377,7 +432,11 @@
       "properties": {
         "event": { "pattern": "^TB$" },
         "value": {
-          "$ref": "#/definitions/resources"
+          "type": "object",
+          "properties": {
+            "resources": {"$ref": "#/definitions/resources" }
+          },
+          "required": ["resources"]
         }
       },
       "required": ["event", "value"]
@@ -385,7 +444,11 @@
       "properties": {
         "event": { "pattern": "^TO$" },
         "value": {
-          "$ref": "#/definitions/resources"
+          "type": "object",
+          "properties": {
+            "resources": {"$ref": "#/definitions/resources" }
+          },
+          "required": ["resources"]
         }
       },
       "required": ["event", "value"]
@@ -405,16 +468,12 @@
       "properties": {
         "event": { "pattern": "^TR$" },
         "value": {
-          "allOf": [{
-            "$ref": "#/definitions/resources"
-          }, {
-            "properties": {
-              "uuid": {
-                "type": "string"
-              }
-            },
-            "required": ["uuid"]
-          }]
+          "type": "object",
+          "properties": {
+            "resources": {"$ref": "#/definitions/resources" },
+            "uuid": { "type": "string" }
+          },
+          "required": ["resources"]
         }
       },
       "required": ["event", "value"]
@@ -422,7 +481,11 @@
       "properties": {
         "event": { "pattern": "^YP$" },
         "value": {
-          "$ref": "#/definitions/resources"
+          "type": "object",
+          "properties": {
+            "resources": {"$ref": "#/definitions/resources" }
+          },
+          "required": ["resources"]
         }
       },
       "required": ["event", "value"]

@@ -1,0 +1,500 @@
+[
+  {
+    "message": {
+      "event": "BC",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "intersection": [[0,0], [0,1], [1,0]] }
+    },
+    "reason": "Build City",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "BC",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "tile": [0,0] }
+    },
+    "reason": "provided tile not intersection",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "BS",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "path": [[[0,0], [0,1], [1,0]],[[0,0], [0,1], [1,0]]] }
+    },
+    "reason": "provided path not intersection",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "BS",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "intersection": [[0,0], [0,1], [1,0]] }
+    },
+    "reason": "Build Settlement",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "BR",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "path": [[[0,0], [0,1], [1,0]],[[0,0], [0,1], [1,0]]] }
+    },
+    "reason": "Build Road",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "BR",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources": []}
+    },
+    "reason": "Provided resources instead of path",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "BD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "cCode": "KN" }
+    },
+    "reason": "Build development card - knight",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "BD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "cCode": "SO" }
+    },
+    "reason": "Development card type illegal",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "CH",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "msg": "test chat message" }
+    },
+    "reason": "Chat message",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "CH",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { }
+    },
+    "reason": "Missing msg key/pair",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "DR",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "result": 5 }
+    },
+    "reason": "Dice roll - 5",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "DR",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "result": 13 }
+    },
+    "reason": "Can't roll a 13",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "CR",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources": [] }
+    },
+    "reason": "Concede Resources",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "CR",
+      "uuid": "123456789ABDCEF",
+      "player": 55,
+      "value": { "resources": [] }
+    },
+    "reason": "Player number format is wrong",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "GO",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { }
+    },
+    "reason": "Game Over",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "GO",
+      "uud": "123456789ABDCEF",
+      "player": "tester",
+      "value": { }
+    },
+    "reason": "Missing uuid",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "LA",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "strength": 5 }
+    },
+    "reason": "Largest Army",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "LA",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "length": 5 }
+    },
+    "reason": "Missing strength",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "LR",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "length": 7 }
+    },
+    "reason": "Longest Road",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "LR",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "length": 5.5 }
+    },
+    "reason": "Length must be an integer",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "MO",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources":[] }
+    },
+    "reason": "Monopoly",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "PA",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "player": "new tester" }
+    },
+    "reason": "Player Add",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "PD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "cCode": "YP" }
+    },
+    "reason": "Play Development Card - Year of Plenty",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "PE",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "phase": "Deployment" }
+    },
+    "reason": "Phase End - Deployment",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "PE",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "phase": "Deploy" }
+    },
+    "reason": "deploy should be Deployment",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "PS",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "phase": "setup" }
+    },
+    "reason": "setup should be Setup",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "PS",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "phase": "Play" }
+    },
+    "reason": "Phase Start - Play",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "RA",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { }
+    },
+    "reason": "Robber Activate",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "RD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { }
+    },
+    "reason": "Robber Deactivate",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "RE",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "round": 12 }
+    },
+    "reason": "Round End",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "RE",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "round": -1 }
+    },
+    "reason": "Round must be positive integer",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "RS",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "round": 13 }
+    },
+    "reason": "Round Start",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "RM",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "tile": [2,1] }
+    },
+    "reason": "Robber Move",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "RP",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources": [] }
+    },
+    "reason": "Resource Production",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "RR",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources": [] }
+    },
+    "reason": "Robber Rob",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "RR",
+      "uuid": "123456789ABDCEF",
+      "player": "tester"
+    },
+    "reason": "Missing value key/pair",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "TA",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "uuid": "09766543221DEFH" }
+    },
+    "reason": "Trade Accept",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "TA",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "uud": "09766543221DEFH" }
+    },
+    "reason": "Missing uuid key/pair",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "TB",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources": [] }
+    },
+    "reason": "Trade Bank",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "TC",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "uuid": "09766543221DEFH" }
+    },
+    "reason": "Trade Cancel",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "TD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "uuid": "09766543221DEFH" }
+    },
+    "reason": "Trade Decline",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "TE",
+      "uuid": "123456789ABDCEF",
+      "value": {}
+    },
+    "reason": "Missing value key/pair",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "TE",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": {}
+    },
+    "reason": "Turn End",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "TO",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources": [] }
+    },
+    "reason": "Trade offer",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "TR",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": {"resources": [] }
+    },
+    "reason": "Trade",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "TS",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { }
+    },
+    "reason": "Turn Start",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "YP",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources": [] }
+    },
+    "reason": "Year of Plenty",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "YP",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": {}
+    },
+    "reason": "Missing resources key/pair",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "YP",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources": {} }
+    },
+    "reason": "resources is an array",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "YP",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resource": [] }
+    },
+    "reason": "resources key/pair missing",
+    "correct": false
+  }
+]
