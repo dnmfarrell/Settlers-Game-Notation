@@ -113,7 +113,8 @@
           "minSize": 2,
           "maxSize": 2,
           "items": {
-            "type": "number"
+            "type": "integer",
+            "minimum": 1
           }
         }
       },

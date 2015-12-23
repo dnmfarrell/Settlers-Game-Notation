@@ -432,10 +432,22 @@
       "event": "TO",
       "uuid": "123456789ABDCEF",
       "player": "tester",
+      "batch": [1,2],
       "value": { "resources": [] }
     },
     "reason": "Trade offer",
     "correct": true
+  },
+  {
+    "message": {
+      "event": "TO",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "batch": [1,2,3],
+      "value": { "resources": [] }
+    },
+    "reason": "Batch must be 2 elements",
+    "correct": false
   },
   {
     "message": {

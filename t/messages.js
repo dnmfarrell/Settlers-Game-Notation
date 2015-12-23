@@ -13,11 +13,11 @@ fs.readFile("schema/message.json", "utf8", function(error, data) {
     {
       if (schema(messages[i].message) === messages[i].correct)
       {
-        console.log((i+1) + " ok - " + messages[i].message.event);
+        console.log((i+1) + " ok - " + messages[i].reason);
       }
       else
       {
-        console.log((i+1) + "not ok - " + messages[i].message.event + " (should " +
+        console.log((i+1) + "not ok - " + messages[i].reason + " (should " +
           (messages[i].correct ? "pass)" : "fail)") );
       }
     }
