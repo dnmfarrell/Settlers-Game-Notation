@@ -98,9 +98,11 @@
     "phase": {
       "type": "string",
       "enum": ["Setup", "Deployment", "Play", "End"]
-    },
-    "message": {
-      "type": "object",
+    }
+  },
+  "type": "object",
+  "allOf": [
+    {
       "properties": {
         "uuid": {
           "type": "string"
@@ -118,11 +120,7 @@
           }
         }
       }
-    }
-  },
-  "type": "object",
-  "allOf": [
-    { "$ref": "#/definitions/message" },
+    },
     {"anyOf": [{
       "properties": {
         "event": { "pattern": "^BC$" },
