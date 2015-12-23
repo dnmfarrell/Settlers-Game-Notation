@@ -117,13 +117,12 @@
             "minimum": 1
           }
         }
-      },
-      "required": ["uuid", "player"]
+      }
     }
   },
   "type": "object",
-  "allOf": [{
-    "$ref": "#/definitions/message"},
+  "allOf": [
+    { "$ref": "#/definitions/message" },
     {"anyOf": [{
       "properties": {
         "event": { "pattern": "^BC$" },
@@ -134,8 +133,7 @@
           },
           "required": ["intersection"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^BD$" },
@@ -146,8 +144,7 @@
           },
           "required": ["cCode"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^BR$" },
@@ -158,8 +155,7 @@
           },
           "required": ["path"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^BS$" },
@@ -170,8 +166,7 @@
           },
           "required": ["intersection"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^CH$" },
@@ -183,8 +178,7 @@
           },
           "required": ["msg"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^CR$" },
@@ -195,8 +189,7 @@
           },
           "required": ["resources"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^DR$" },
@@ -210,14 +203,12 @@
           },
           "required": ["result"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^GO$" },
         "value": {}
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^LA$" },
@@ -229,8 +220,7 @@
           },
           "required": ["strength"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^LR$" },
@@ -242,8 +232,7 @@
           },
           "required": ["length"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^MD$" },
@@ -251,8 +240,7 @@
           "$ref": "#/definitions/tiles",
           "$ref": "#/definitions/harbors"
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^MO$" },
@@ -263,8 +251,7 @@
           },
           "required": ["resources"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^PA$" },
@@ -276,8 +263,7 @@
           },
           "required": ["player"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^PD$" },
@@ -288,8 +274,7 @@
           },
           "required": ["cCode"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^PE$" },
@@ -300,8 +285,7 @@
           },
           "required": ["phase"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^PS$" },
@@ -312,20 +296,17 @@
           },
           "required": ["phase"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^RA$" },
         "value": {}
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^RD$" },
         "value": {}
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^RE$" },
@@ -338,8 +319,7 @@
           },
           "required": ["round"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^RS$" },
@@ -352,8 +332,7 @@
           },
           "required": ["round"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^RM$" },
@@ -364,8 +343,7 @@
           },
           "required": ["tile"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^RP$" },
@@ -376,8 +354,7 @@
           },
           "required": ["resources"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^RR$" },
@@ -388,8 +365,7 @@
           },
           "required": ["resources"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^TA$" },
@@ -401,8 +377,7 @@
           },
           "required": ["uuid"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^TD$" },
@@ -414,8 +389,7 @@
           },
           "required": ["uuid"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^TC$" },
@@ -427,8 +401,7 @@
           },
           "required": ["uuid"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^TB$" },
@@ -439,8 +412,7 @@
           },
           "required": ["resources"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^TO$" },
@@ -451,20 +423,17 @@
           },
           "required": ["resources"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^TE$" },
         "value": {}
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^TS$" },
         "value": {}
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^TR$" },
@@ -476,8 +445,7 @@
           },
           "required": ["resources"]
         }
-      },
-      "required": ["event", "value"]
+      }
     }, {
       "properties": {
         "event": { "pattern": "^YP$" },
@@ -488,8 +456,8 @@
           },
           "required": ["resources"]
         }
-      },
-      "required": ["event", "value"]
-    }]}
-  ]
+      }
+    }]
+  }],
+  "required": ["uuid", "player", "event", "value"]
 }
