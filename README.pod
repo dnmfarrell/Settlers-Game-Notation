@@ -18,9 +18,9 @@ This is a working draft of the SGN spec, and all feedback is welcome. The spec i
 
 The F<schema/message.json> file is a draft schema for an SGN message, and F<schema/log.json> defines a log of SGN.
 
-=head2 Examples
+=head2 Tests
 
-Examples of SGN will be available in the F<examples/> directory.
+The F<t> directory has test scripts in Perl and JavaScript. F<test-corpus/messages.json> contains example valid and invalid messages used for testing.
 
 =head2 Definition
 
