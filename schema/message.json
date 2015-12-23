@@ -115,7 +115,9 @@
       "items": {
         "type": "integer",
         "minimum": 1
-      }
+      },
+      "event": { "type": "string" },
+      "value": { "type": "object" }
     }
   },
   "required": ["uuid", "player", "event", "value"],
