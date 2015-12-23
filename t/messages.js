@@ -17,7 +17,7 @@ fs.readFile("schema/message.json", "utf8", function(error, data) {
       }
       else
       {
-        console.log((i+1) + "not ok - " + messages[i].reason + " (should " +
+        console.log((i+1) + " not ok - " + messages[i].reason + " (should " +
           (messages[i].correct ? "pass)" : "fail)") );
       }
     }
