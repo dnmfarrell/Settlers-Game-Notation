@@ -273,7 +273,7 @@ There are 5 types of development cards:
 
 =head2 Events
 
-Events are the things which drive the game: player actions, dice rolls etc. Every entry in SGN is an event, consisting of an event code and a JSON value. Refer to F<example.json> for examples of these events in SGN.
+Events are the things which drive the game: player actions, dice rolls etc. Every entry in SGN is an event, consisting of an event code and a JSON value.
 
   Code Name                    Value
   --------------------------------------------------------------------------------------
