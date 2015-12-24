@@ -308,7 +308,7 @@ Events are the things which drive the game: player actions, dice rolls etc. Ever
   TO   Trade Offer             {"resources":<resource notation>}
   TR   Trade Resources         {"uuid":"#", "resources":<resource notation>}
   TS   Turn Start              {}
-  VI   Version Information     {"version":0.3, "uri":"https://github.com/dnmfarrell/Settlers-Game-Notation/schema/v0.3/message.json" }
+  VI   Version Information     {"version":0.3, "schema_uri":"https://github.com/dnmfarrell/Settlers-Game-Notation/schema/v0.3/message.json" }
   YP   Year of Plenty          {"resources":<resource notation>}
 
 =head2 Trading
@@ -459,9 +459,9 @@ L<Catan|http://playcatan.com> the official website for Settlers of Catan.
 
 =head2 Changes
 
-=head3 0.03 2015-12-17
+=head3 0.03 2015-12-24
 
-Messages can include a batch value. Added the trade decline event. Changed the definition of tiles and harbors to be objects rather than arrays. Resource notation is now an array of objects that include a player property. Removed C<player> from every event value, except for Player Add (it was redundant). Types of things are identified by new names: C<tCodes> for tile codes, C<hCodes> for harbor codes and C<cCodes> for development card codes.
+Messages can include a batch value. Added the trade decline event. Changed the definition of tiles and harbors to be objects rather than arrays. Resource notation is now an array of objects that include a player property. Removed C<player> from every event value, except for Player Add (it was redundant). Types of things are identified by new names: C<tCodes> for tile codes, C<hCodes> for harbor codes and C<cCodes> for development card codes. Added new C<VI> event type. Defined SGN schemas for log and messages.
 
 =head3 0.02 2015-11-25
 

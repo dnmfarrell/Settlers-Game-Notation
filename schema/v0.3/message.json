@@ -1,5 +1,5 @@
 {
-  "id": "https://github.com/dnmfarrell/Settlers-Game-Notation/schema/message.json",
+  "id": "https://github.com/dnmfarrell/Settlers-Game-Notation/schema/v0.3/message.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {
     "tCode": {
@@ -455,5 +455,16 @@
         "required": ["resources"]
       }
     }
-  }]
+  }, {
+    "properties": {
+      "event": { "pattern": "^VI$" },
+      "value": {
+        "type": "object",
+        "properties": {
+          "version": { "type": "number" },
+          "schema_uri":  { "type": "string" }
+        },
+        "required": ["version", "schema_uri"]
+      }
+    }
 }

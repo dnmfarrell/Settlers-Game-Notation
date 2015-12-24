@@ -1,5 +1,5 @@
 {
-  "id": "https://raw.githubusercontent.com/dnmfarrell/Settlers-Game-Notation/master/schema/",
+  "id": "https://raw.githubusercontent.com/dnmfarrell/Settlers-Game-Notation/master/schema/v0.3/",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type":"array",
   "items": { "$ref": "message.json" }
