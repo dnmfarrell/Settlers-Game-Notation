@@ -8,7 +8,7 @@ GetOptions(
   'update' => \(my $update_log),
 );
 
-my $spec = decode_json( do{ local(@ARGV, $/) = 'schema/message.json';<>} );
+my $spec = decode_json( do{ local(@ARGV, $/) = 'schema/v0.3/message.json';<>} );
 my $messages = decode_json( do{ local(@ARGV, $/) = 'test-corpus/messages.json';<>} );
 ok my $schema = JSON::Schema::AsType->new( schema => $spec ), 'load schema';
 

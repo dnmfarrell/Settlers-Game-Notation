@@ -467,4 +467,5 @@
         "required": ["version", "schema_uri"]
       }
     }
+  }]
 }
