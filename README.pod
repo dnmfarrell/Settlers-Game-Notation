@@ -277,38 +277,39 @@ Events are the things which drive the game: player actions, dice rolls etc. Ever
 
   Code Name                    Value
   --------------------------------------------------------------------------------------
-  BC   Build city              {"intersection":<intersection coordinates>}
-  BD   Build development card  {"cCode": "KN|MO|RB|VP|YP"}
-  BR   Build road              {"path":<path coordinates>}
-  BS   Build settlement        {"intersection":<intersection coordinates>}
+  BC   Build City              {"intersection":<intersection coordinates>}
+  BD   Build Development card  {"cCode": "KN|MO|RB|VP|YP"}
+  BR   Build Road              {"path":<path coordinates>}
+  BS   Build Settlement        {"intersection":<intersection coordinates>}
   CH   Chat                    {"msg": "msg text"}
-  CR   Concede resources       {"resources":<resource notation>}
-  DR   Dice roll               {"result":#}
+  CR   Concede Resources       {"resources":<resource notation>}
+  DR   Dice Roll               {"result":#}
   GO   Game Over               {}
-  LA   Largest army            {"strength":#}
-  LR   Longest road            {"length":#}
+  LA   Largest Army            {"strength":#}
+  LR   Longest Road            {"length":#}
   MD   Map Define              {"tiles":[...], "harbors":[..]}
   MO   Monopoly                {"resources":<resource notation>}
   PA   Player Add              {"player": "#"}
-  PD   Play development card   {"code": "KN|MO|RB|VP|YP"}
+  PD   Play Development card   {"code": "KN|MO|RB|VP|YP"}
   PE   Phase End               {"phase": "Setup|Deployment|Play|End"}
   PS   Phase Start             {"phase": "Setup|Deployment|Play|End"}
-  RA   Robber activate         {}
-  RD   Robber deactivate       {}
+  RA   Robber Activate         {}
+  RD   Robber Deactivate       {}
   RE   Round End               {"round": #}
-  RM   Robber move             {"tile": <tile coordinates>}
+  RM   Robber Move             {"tile": <tile coordinates>}
   RP   Resource Production     {"resources": <resource notation> }
-  RR   Robber rob              {"resources": <resource notation> }
+  RR   Robber Rob              {"resources": <resource notation> }
   RS   Round Start             {"round": #}
-  TA   Trade accept            {"uuid":"#"}
-  TB   Trade bank              {"resources":<resource notation>}
-  TC   Trade cancel            {"uuid":"#"}
-  TD   Trade decline           {"uuid":"#"}
+  TA   Trade Accept            {"uuid":"#"}
+  TB   Trade Bank              {"resources":<resource notation>}
+  TC   Trade Cancel            {"uuid":"#"}
+  TD   Trade Decline           {"uuid":"#"}
   TE   Turn End                {}
-  TO   Trade offer             {"resources":<resource notation>}
-  TR   Trade resources         {"uuid":"#", "resources":<resource notation>}
+  TO   Trade Offer             {"resources":<resource notation>}
+  TR   Trade Resources         {"uuid":"#", "resources":<resource notation>}
   TS   Turn Start              {}
-  YP   Year of plenty          {"resources":<resource notation>}
+  VI   Version Information     {"version":0.3, "uri":"https://github.com/dnmfarrell/Settlers-Game-Notation/schema/v0.3/message.json" }
+  YP   Year of Plenty          {"resources":<resource notation>}
 
 =head2 Trading
 
@@ -428,6 +429,11 @@ During the Play phase, the turn sequence begins with Player 1. They may play a d
 Players are just string identifiers that refer to a player of the game, an administrator/referee or the bank. The examples in this document refer to players by stringified numbers like C<"1">, but this is not necessary. The string must be unique identifier for the player, so it's fine to use a name instead: C<"David">.
 
 Two player names are special and reserved: C<"B"> refers to the banker and C<"A"> refers to the administrator, server or refereee of the game.
+
+
+=head2 Version
+
+The C<VI> event defines the version of SGN being used in the log. It includes a schema URI which can be used to download the JSON schema for the SGN version.
 
 =head1 FAQ
 
