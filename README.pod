@@ -20,7 +20,7 @@ The F<schema/message.json> file is a draft schema for an SGN message, and F<sche
 
 =head2 Tests
 
-The F<t> directory has test scripts in Perl and JavaScript. F<test-corpus/messages.json> contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require L<JSON::Schema::AsType|https://metacpan.org/pod/JSON::Schema::AsType> and L<Mojolicious|https://metacpan.org/pod/Mojolicious>
+The F<t> directory has test scripts in Perl and JavaScript. F<test-corpus/messages.json> contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require L<JSON::Schema::AsType|https://metacpan.org/pod/JSON::Schema::AsType> and L<Mojolicious|https://metacpan.org/pod/Mojolicious>:
 
   $ prove -l
   t/log.t ....... ok
@@ -45,7 +45,6 @@ If you prefer node.js, you can run the JavaScript tests, which requires L<ajv|ht
   ok 61 - Map Definition: missing harbors
   1..61
 
-
 =head2 Definition
 
 A valid SGN document is an array of Messages. The idea is to capture the entirety of a game of Settlers from setup to end. The order of messages is always sequential: an SGN document could describe just the game setup for example. But it couldn't describe the deployment phase unless the setup phase is also defined earlier in the same document.
@@ -62,7 +61,7 @@ Every event in a game of Settlers is described in a message format. A message is
   value   The value associated with the event code (see Events below)
   batch   The sequence number of the message e.g. message 1 of 2 is: [1,2]
 
-C<batch> is an optional property. An example admin message for declaring player 2 has joined the game:
+An example admin message for declaring player 2 has joined the game:
 
   {
     "uuid": "1C68D574-937F-11E5-AF19-C9E87C9D2E84",
@@ -79,7 +78,7 @@ Here is a batch of two messages ending the round and the deployment phase:
     "event": "RE",
     "value": {"round":2},
     "batch": [1,2]
-  }
+  },
   {
     "uuid": "1C68D574-937F-11E5-AF19-C9E87C9D2E84",
     "player": "A",
@@ -88,7 +87,7 @@ Here is a batch of two messages ending the round and the deployment phase:
     "batch": [2,2]
   }
 
-Batching is useful for implementation: a client doesn't have to redraw the screen until it has finished processing an entire batch of messages, rather than redrawing the screen everytime it processes a single message.
+Batching is useful for implementation: a client doesn't have to redraw the screen until it has finished processing an entire batch of messages, rather than redrawing the screen every time it processes a single message.
 
 =head2 Hexes
 
@@ -146,7 +145,7 @@ A tile is defined by its hex coordinates, type code and resource number. This is
 
 =head2 Intersections
 
-Intersections represent a point between 3 hex locations in a clockwise order. Intersections are represented as an array of 3 hex locations. E.g. the six intersections of the center hex on the starter map layout:
+Intersections represent a point between 3 hex locations in a clockwise order. Intersections are represented as an array of 3 hex locations. E.g. the six intersections of the center hex:
 
                  [[0,-1],[0,0],[-1,0]]
                          /   \
@@ -265,7 +264,7 @@ It uses the resource code as the key and the value as the quantity. Both quantit
 The implication of this notation is that all resources must balance. For trades with the bank, C<B> represents the bank. Here is a bank trade by player 2, losing 4 grain to get a brick:
 
   [
-    {"player":"2",    "G":-4,"B": 1},
+    {"player":"2", "G":-4,"B": 1},
     {"player":"B", "G": 4,"B":-1}
   ]
 
@@ -370,7 +369,7 @@ The other player accepts the trade offer using the trade accept event.
 
 =item * End turn
 
-If a player's turn ends, all outstanding trade offers are cancelled. No Trade Cancel events are issued for this.
+If a player's turn ends, all outstanding trade offers are canceled. No Trade Cancel events are issued for this.
 
 =back
 
