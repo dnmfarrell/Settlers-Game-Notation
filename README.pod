@@ -192,7 +192,7 @@ Every tile is listed with its coordinates, type code and resource number. C<null
       {"tile":[-1,2],"tCode":"F","rNumber":2},
       {"tile":[-2,2],"tCode":"M","rNumber":5},
       {"tile":[-2,1],"tCode":"H","rNumber":8},
-      {"tile":[-2,0],"tCode":"D",null},
+      {"tile":[-2,0],"tCode":"D","rNumber":null},
       {"tile":[-1,-1],"tCode":"H","rNumber":4},
       {"tile":[0,-1],"tCode":"M","rNumber":6},
       {"tile":[1,-1],"tCode":"H","rNumber":5},
@@ -252,24 +252,24 @@ bank.
 
 Players may accumulate these throughout the game. There are four normal and two special types:
 
-  Code  Name              How to get it
-  ---------------------------------------------------------
-  DC    Development card  Build development card event (BD)
-  S     Settlement        Build settlement event (BS)
-  C     City              Build city event (BC)
-  R     Road              Build road event (BR)
-  LA    Largest army      Largest Army event
-  LR    Longest road      Longest Road event
+  Name              How to get it
+  ---------------------------------------------------
+  Development card  Build development card event (BD)
+  Settlement        Build settlement event (BS)
+  City              Build city event (BC)
+  Road              Build road event (BR)
+  Largest army      Largest Army event (LA)
+  Longest road      Longest Road event (LR)
 
 There are 5 types of development cards:
 
-  Code  Name
-  -------------------
-  KN    Knight
-  MO    Monopoly
-  RB    Road building
-  VP    Victory Point
-  YP    Year of plenty
+  cCode  Name
+  --------------------
+  KN     Knight
+  MO     Monopoly
+  RB     Road building
+  VP     Victory Point
+  YP     Year of plenty
 
 =head2 Events
 
@@ -289,8 +289,8 @@ Events are the things which drive the game: player actions, dice rolls etc. Ever
   LR   Longest Road            {"length":#}
   MD   Map Define              {"tiles":[...], "harbors":[..]}
   MO   Monopoly                {"resources":<resource notation>}
-  PA   Player Add              {"player": "#"}
-  PD   Play Development card   {"code": "KN|MO|RB|VP|YP"}
+  PA   Player Add              {"player": "#", "name": "foo bar", "avatar":"/path/to/avatar.jpg"}
+  PD   Play Development card   {"cCode": "KN|MO|RB|VP|YP"}
   PE   Phase End               {"phase": "Setup|Deployment|Play|End"}
   PS   Phase Start             {"phase": "Setup|Deployment|Play|End"}
   RA   Robber Activate         {}
