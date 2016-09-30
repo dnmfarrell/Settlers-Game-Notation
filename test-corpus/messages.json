@@ -383,10 +383,55 @@
       "event": "TB",
       "uuid": "123456789ABDCEF",
       "player": "tester",
-      "value": { "resources": [] }
+      "value": { "resources": [
+        { "player": "one",
+          "B": 2,
+          "L": -2
+        },
+        { "player": "two",
+          "B": -2,
+          "L": 2
+        }
+      ] }
     },
     "reason": "Trade Bank",
     "correct": true
+  },
+  {
+    "message": {
+      "event": "TB",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources": [
+        { "player": "one",
+          "B": 2,
+          "L": -2
+        },
+        { "player": "two"
+        }
+      ] }
+    },
+    "reason": "Trade Bank requires at least 2 properties per object",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "TB",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": { "resources": [
+        { "player": "one",
+          "B": 2,
+          "L": -2
+        },
+        { "player": "two",
+          "B": 2,
+          "X": -2
+        }
+      ] }
+    },
+    "reason": "Trade Bank resources unrecognized resource code",
+    "correct": false
   },
   {
     "message": {
@@ -507,6 +552,430 @@
       "value": { "resource": [] }
     },
     "reason": "resources key/pair missing",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "MD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": {
+        "tiles": [
+          {"tile":[0,-3],"tCode":"S","rNumber":null},
+          {"tile":[1,-3],"tCode":"S","rNumber":null},
+          {"tile":[2,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-2],"tCode":"S","rNumber":null},
+          {"tile":[3,-1],"tCode":"S","rNumber":null},
+          {"tile":[3,0],"tCode":"S","rNumber":null},
+          {"tile":[2,1],"tCode":"S","rNumber":null},
+          {"tile":[1,2],"tCode":"S","rNumber":null},
+          {"tile":[0,3],"tCode":"S","rNumber":null},
+          {"tile":[-1,3],"tCode":"S","rNumber":null},
+          {"tile":[-2,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,2],"tCode":"S","rNumber":null},
+          {"tile":[-3,1],"tCode":"S","rNumber":null},
+          {"tile":[-3,0],"tCode":"S","rNumber":null},
+          {"tile":[-2,-1],"tCode":"S","rNumber":null},
+          {"tile":[-1,-2],"tCode":"S","rNumber":null},
+          {"tile":[0,-2],"tCode":"FO","rNumber":11},
+          {"tile":[1,-2],"tCode":"P","rNumber":12},
+          {"tile":[2,-2],"tCode":"F","rNumber":9},
+          {"tile":[2,-1],"tCode":"P","rNumber":10},
+          {"tile":[2,0],"tCode":"F","rNumber":8},
+          {"tile":[1,1],"tCode":"M","rNumber":3},
+          {"tile":[0,2],"tCode":"FO","rNumber":6},
+          {"tile":[-1,2],"tCode":"F","rNumber":2},
+          {"tile":[-2,2],"tCode":"M","rNumber":5},
+          {"tile":[-2,1],"tCode":"H","rNumber":8},
+          {"tile":[-2,0],"tCode":"D","rNumber":null},
+          {"tile":[-1,-1],"tCode":"H","rNumber":4},
+          {"tile":[0,-1],"tCode":"M","rNumber":6},
+          {"tile":[1,-1],"tCode":"H","rNumber":5},
+          {"tile":[1,0],"tCode":"FO","rNumber":4},
+          {"tile":[0,1],"tCode":"P","rNumber":9},
+          {"tile":[-1,1],"tCode":"P","rNumber":10},
+          {"tile":[-1,0],"tCode":"FO","rNumber":3},
+          {"tile":[0,0],"tCode":"F","rNumber":11}
+        ],
+        "harbors": [
+          {"path":[[[0,-3],[0,-2],[-1,-2]],  [[1,-3],[0,-2],[0,-3]]],   "hCode": "HR"},
+          {"path":[[[2,-3],[1,-2],[1,-3]],   [[2,-3],[2,-2],[1,-2]]],   "hCode": "HRW"},
+          {"path":[[[3,-2],[2,-1],[2,-2]],   [[3,-2],[3,-1],[2,-1]]],   "hCode": "HR"},
+          {"path":[[[3,-1],[3,0],[2,0]],     [[3,0],[2,1],[2,0]]],      "hCode": "HR"},
+          {"path":[[[2,1],[1,2],[1,1]],      [[1,1],[1,2],[0,2]]],      "hCode": "HRB"},
+          {"path":[[[0,2],[-1,3],[-1,2]],    [[-1,2],[-1,3],[-2,3]]],   "hCode": "HRL"},
+          {"path":[[[-2,2],[-2,3],[-3,3]],   [[-2,2],[-3,3],[-3,2]]],   "hCode": "HR"},
+          {"path":[[[-2,1],[-3,2],[-3,1]],   [[-2,0],[-2,1],[-3,1]]],   "hCode": "HRG"},
+          {"path":[[[-1,-1],[-2,0],[-2,-1]], [[-1,-2],[-1,-1],[-2,-1]]],"hCode": "HRO"}
+        ]
+      }
+    },
+    "reason": "Map Definition: starter map",
+    "correct": true
+  },
+  {
+    "message": {
+      "event": "MD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": {
+        "tiles": [
+          {"tile":[0,-3],"tCode":"S","rNumber":null},
+          {"tile":[1,-3],"tCode":"S","rNumber":null},
+          {"tile":[2,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-2],"tCode":"S","rNumber":null},
+          {"tile":[3,-1],"tCode":"S","rNumber":null},
+          {"tile":[3,0],"tCode":"S","rNumber":null},
+          {"tile":[2,1],"tCode":"S","rNumber":null},
+          {"tile":[1,2],"tCode":"S","rNumber":null},
+          {"tile":[0,3],"tCode":"S","rNumber":null},
+          {"tile":[-1,3],"tCode":"S","rNumber":null},
+          {"tile":[-2,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,2],"tCode":"S","rNumber":null},
+          {"tile":[-3,1],"tCode":"S","rNumber":null},
+          {"tile":[-3,0],"tCode":"S","rNumber":null},
+          {"tile":[-2,-1],"tCode":"S","rNumber":null},
+          {"tile":[-1,-2],"tCode":"S","rNumber":null},
+          {"tile":[0,-2],"tCode":"FO","rNumber":11},
+          {"tile":[1,-2],"tCode":"P","rNumber":12},
+          {"tile":[2,-2],"tCode":"F","rNumber":9},
+          {"tile":[2,-1],"tCode":"P","rNumber":10},
+          {"tile":[2,0],"tCode":"F","rNumber":8},
+          {"tile":[1,1],"tCode":"M","rNumber":3},
+          {"tile":[0,2],"tCode":"X","rNumber":6},
+          {"tile":[-1,2],"tCode":"F","rNumber":2},
+          {"tile":[-2,2],"tCode":"M","rNumber":5},
+          {"tile":[-2,1],"tCode":"H","rNumber":8},
+          {"tile":[-2,0],"tCode":"D","rNumber":null},
+          {"tile":[-1,-1],"tCode":"H","rNumber":4},
+          {"tile":[0,-1],"tCode":"M","rNumber":6},
+          {"tile":[1,-1],"tCode":"H","rNumber":5},
+          {"tile":[1,0],"tCode":"FO","rNumber":4},
+          {"tile":[0,1],"tCode":"P","rNumber":9},
+          {"tile":[-1,1],"tCode":"P","rNumber":10},
+          {"tile":[-1,0],"tCode":"FO","rNumber":3},
+          {"tile":[0,0],"tCode":"F","rNumber":11}
+        ],
+        "harbors": [
+          {"path":[[[0,-3],[0,-2],[-1,-2]],  [[1,-3],[0,-2],[0,-3]]],   "hCode": "HR"},
+          {"path":[[[2,-3],[1,-2],[1,-3]],   [[2,-3],[2,-2],[1,-2]]],   "hCode": "HRW"},
+          {"path":[[[3,-2],[2,-1],[2,-2]],   [[3,-2],[3,-1],[2,-1]]],   "hCode": "HR"},
+          {"path":[[[3,-1],[3,0],[2,0]],     [[3,0],[2,1],[2,0]]],      "hCode": "HR"},
+          {"path":[[[2,1],[1,2],[1,1]],      [[1,1],[1,2],[0,2]]],      "hCode": "HRB"},
+          {"path":[[[0,2],[-1,3],[-1,2]],    [[-1,2],[-1,3],[-2,3]]],   "hCode": "HRL"},
+          {"path":[[[-2,2],[-2,3],[-3,3]],   [[-2,2],[-3,3],[-3,2]]],   "hCode": "HR"},
+          {"path":[[[-2,1],[-3,2],[-3,1]],   [[-2,0],[-2,1],[-3,1]]],   "hCode": "HRG"},
+          {"path":[[[-1,-1],[-2,0],[-2,-1]], [[-1,-2],[-1,-1],[-2,-1]]],"hCode": "HRO"}
+        ]
+      }
+    },
+    "reason": "Map Definition: tile has illegal tCode",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "MD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": {
+        "tiles": [
+          {"tile":[0,-3],"tCode":"S","rNumber":null},
+          {"tile":[1,-3],"tCode":"S","rNumber":null},
+          {"tile":[2,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-2],"tCode":"S","rNumber":null},
+          {"tile":[3,-1],"tCode":"S","rNumber":null},
+          {"tile":[3,0],"tCode":"S","rNumber":null},
+          {"tile":[2,1],"tCode":"S","rNumber":null},
+          {"tile":[1,2],"tCode":"S","rNumber":null},
+          {"tile":[0,3],"tCode":"S","rNumber":null},
+          {"tile":[-1,3],"tCode":"S","rNumber":null},
+          {"tile":[-2,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,2],"tCode":"S","rNumber":null},
+          {"tile":[-3,1],"tCode":"S","rNumber":null},
+          {"tile":[-3,0],"tCode":"S","rNumber":null},
+          {"tile":[-2,-1],"tCode":"S","rNumber":null},
+          {"tile":[-1,-2],"tCode":"S","rNumber":null},
+          {"tile":[0,-2],"tCode":"FO","rNumber":11},
+          {"tile":[1,-2],"tCode":"P","rNumber":12},
+          {"tile":[2,-2],"tCode":"F","rNumber":9},
+          {"tile":[2,-1],"tCode":"P","rNumber":10},
+          {"tile":[2,0],"tCode":"F","rNumber":8},
+          {"tile":[1,1],"tCode":"M","rNumber":3},
+          {"tile":[0,2],"tCode":"FO","rNumber":6},
+          {"tile":[-1,2],"tCode":"F","rNumber":2},
+          {"tile":[-2,2],"tCode":"M","rNumber":5},
+          {"tile":[-2,1],"tCode":"H","rNumber":8},
+          {"tile":[-2,0],"tCode":"D","rNumber":null},
+          {"tile":[-1,-1],"tCode":"H","rNumber":4},
+          {"tile":[0,-1],"tCode":"M","rNumber":6},
+          {"tile":[1,-1],"tCode":"H","rNumber":5},
+          {"tile":[1,0],"tCode":"FO","rNumber":4},
+          {"tile":[0,1],"tCode":"P","rNumber":9},
+          {"tile":[-1,1],"tCode":"P","rNumber":10},
+          {"tile":[-1,0],"tCode":"FO","rNumber":3},
+          {"tile":[0],"tCode":"F","rNumber":11}
+        ],
+        "harbors": [
+          {"path":[[[0,-3],[0,-2],[-1,-2]],  [[1,-3],[0,-2],[0,-3]]],   "hCode": "HR"},
+          {"path":[[[2,-3],[1,-2],[1,-3]],   [[2,-3],[2,-2],[1,-2]]],   "hCode": "HRW"},
+          {"path":[[[3,-2],[2,-1],[2,-2]],   [[3,-2],[3,-1],[2,-1]]],   "hCode": "HR"},
+          {"path":[[[3,-1],[3,0],[2,0]],     [[3,0],[2,1],[2,0]]],      "hCode": "HR"},
+          {"path":[[[2,1],[1,2],[1,1]],      [[1,1],[1,2],[0,2]]],      "hCode": "HRB"},
+          {"path":[[[0,2],[-1,3],[-1,2]],    [[-1,2],[-1,3],[-2,3]]],   "hCode": "HRL"},
+          {"path":[[[-2,2],[-2,3],[-3,3]],   [[-2,2],[-3,3],[-3,2]]],   "hCode": "HR"},
+          {"path":[[[-2,1],[-3,2],[-3,1]],   [[-2,0],[-2,1],[-3,1]]],   "hCode": "HRG"},
+          {"path":[[[-1,-1],[-2,0],[-2,-1]], [[-1,-2],[-1,-1],[-2,-1]]],"hCode": "HRO"}
+        ]
+      }
+    },
+    "reason": "Map Definition: a tile has too few coordinates",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "MD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": {
+        "tiles": [
+          {"tile":[0,-3],"tCode":"S","rNumber":null},
+          {"tile":[1,-3],"tCode":"S","rNumber":null},
+          {"tile":[2,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-2],"tCode":"S","rNumber":null},
+          {"tile":[3,-1],"tCode":"S","rNumber":null},
+          {"tile":[3,0],"tCode":"S","rNumber":null},
+          {"tile":[2,1],"tCode":"S","rNumber":null},
+          {"tile":[1,2],"tCode":"S","rNumber":null},
+          {"tile":[0,3],"tCode":"S","rNumber":null},
+          {"tile":[-1,3],"tCode":"S","rNumber":null},
+          {"tile":[-2,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,2],"tCode":"S","rNumber":null},
+          {"tile":[-3,1],"tCode":"S","rNumber":null},
+          {"tile":[-3,0],"tCode":"S","rNumber":null},
+          {"tile":[-2,-1],"tCode":"S","rNumber":null},
+          {"tile":[-1,-2],"tCode":"S","rNumber":null},
+          {"tile":[0,-2],"tCode":"FO","rNumber":11},
+          {"tile":[1,-2],"tCode":"P","rNumber":12},
+          {"tile":[2,-2],"tCode":"F","rNumber":9},
+          {"tile":[2,-1],"tCode":"P","rNumber":10},
+          {"tile":[2,0],"tCode":"F","rNumber":8},
+          {"tile":[1,1],"tCode":"M","rNumber":3},
+          {"tile":[0,2],"tCode":"FO","rNumber":6},
+          {"tile":[-1,2],"tCode":"F","rNumber":2},
+          {"tile":[-2,2],"tCode":"M","rNumber":5},
+          {"tile":[-2,1],"tCode":"H","rNumber":8},
+          {"tile":[-2,0],"tCode":"D","rNumber":null},
+          {"tile":[-1,-1],"tCode":"H","rNumber":4},
+          {"tile":[0,-1],"tCode":"M","rNumber":6},
+          {"tile":[1,-1],"tCode":"H","rNumber":5},
+          {"tile":[1,0],"tCode":"FO","rNumber":4},
+          {"tile":[0,1],"tCode":"P","rNumber":9},
+          {"tile":[-1,1],"tCode":"P","rNumber":10},
+          {"tile":[-1,0],"tCode":"FO","rNumber":3},
+          {"tile":[0,0],"tCode":"F","rNumber":100}
+        ],
+        "harbors": [
+          {"path":[[[0,-3],[0,-2],[-1,-2]],  [[1,-3],[0,-2],[0,-3]]],   "hCode": "HR"},
+          {"path":[[[2,-3],[1,-2],[1,-3]],   [[2,-3],[2,-2],[1,-2]]],   "hCode": "HRW"},
+          {"path":[[[3,-2],[2,-1],[2,-2]],   [[3,-2],[3,-1],[2,-1]]],   "hCode": "HR"},
+          {"path":[[[3,-1],[3,0],[2,0]],     [[3,0],[2,1],[2,0]]],      "hCode": "HR"},
+          {"path":[[[2,1],[1,2],[1,1]],      [[1,1],[1,2],[0,2]]],      "hCode": "HRB"},
+          {"path":[[[0,2],[-1,3],[-1,2]],    [[-1,2],[-1,3],[-2,3]]],   "hCode": "HRL"},
+          {"path":[[[-2,2],[-2,3],[-3,3]],   [[-2,2],[-3,3],[-3,2]]],   "hCode": "HR"},
+          {"path":[[[-2,1],[-3,2],[-3,1]],   [[-2,0],[-2,1],[-3,1]]],   "hCode": "HRG"},
+          {"path":[[[-1,-1],[-2,0],[-2,-1]], [[-1,-2],[-1,-1],[-2,-1]]],"hCode": "HRO"}
+        ]
+      }
+    },
+    "reason": "Map Definition: a tile has illegal rNumber",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "MD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": {
+        "tiles": [
+          {"tile":[0,-3],"tCode":"S","rNumber":null},
+          {"tile":[1,-3],"tCode":"S","rNumber":null},
+          {"tile":[2,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-2],"tCode":"S","rNumber":null},
+          {"tile":[3,-1],"tCode":"S","rNumber":null},
+          {"tile":[3,0],"tCode":"S","rNumber":null},
+          {"tile":[2,1],"tCode":"S","rNumber":null},
+          {"tile":[1,2],"tCode":"S","rNumber":null},
+          {"tile":[0,3],"tCode":"S","rNumber":null},
+          {"tile":[-1,3],"tCode":"S","rNumber":null},
+          {"tile":[-2,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,2],"tCode":"S","rNumber":null},
+          {"tile":[-3,1],"tCode":"S","rNumber":null},
+          {"tile":[-3,0],"tCode":"S","rNumber":null},
+          {"tile":[-2,-1],"tCode":"S","rNumber":null},
+          {"tile":[-1,-2],"tCode":"S","rNumber":null},
+          {"tile":[0,-2],"tCode":"FO","rNumber":11},
+          {"tile":[1,-2],"tCode":"P","rNumber":12},
+          {"tile":[2,-2],"tCode":"F","rNumber":9},
+          {"tile":[2,-1],"tCode":"P","rNumber":10},
+          {"tile":[2,0],"tCode":"F","rNumber":8},
+          {"tile":[1,1],"tCode":"M","rNumber":3},
+          {"tile":[0,2],"tCode":"FO","rNumber":6},
+          {"tile":[-1,2],"tCode":"F","rNumber":2},
+          {"tile":[-2,2],"tCode":"M","rNumber":5},
+          {"tile":[-2,1],"tCode":"H","rNumber":8},
+          {"tile":[-2,0],"tCode":"D","rNumber":null},
+          {"tile":[-1,-1],"tCode":"H","rNumber":4},
+          {"tile":[0,-1],"tCode":"M","rNumber":6},
+          {"tile":[1,-1],"tCode":"H","rNumber":5},
+          {"tile":[1,0],"tCode":"FO","rNumber":4},
+          {"tile":[0,1],"tCode":"P","rNumber":9},
+          {"tile":[-1,1],"tCode":"P","rNumber":10},
+          {"tile":[-1,0],"tCode":"FO","rNumber":3},
+          {"tile":[0,0,0],"tCode":"F","rNumber":11}
+        ],
+        "harbors": [
+          {"path":[[[0,-3],[0,-2],[-1,-2]],  [[1,-3],[0,-2],[0,-3]]],   "hCode": "HR"},
+          {"path":[[[2,-3],[1,-2],[1,-3]],   [[2,-3],[2,-2],[1,-2]]],   "hCode": "HRW"},
+          {"path":[[[3,-2],[2,-1],[2,-2]],   [[3,-2],[3,-1],[2,-1]]],   "hCode": "HR"},
+          {"path":[[[3,-1],[3,0],[2,0]],     [[3,0],[2,1],[2,0]]],      "hCode": "HR"},
+          {"path":[[[2,1],[1,2],[1,1]],      [[1,1],[1,2],[0,2]]],      "hCode": "HRB"},
+          {"path":[[[0,2],[-1,3],[-1,2]],    [[-1,2],[-1,3],[-2,3]]],   "hCode": "HRL"},
+          {"path":[[[-2,2],[-2,3],[-3,3]],   [[-2,2],[-3,3],[-3,2]]],   "hCode": "HR"},
+          {"path":[[[-2,1],[-3,2],[-3,1]],   [[-2,0],[-2,1],[-3,1]]],   "hCode": "HRG"},
+          {"path":[[[-1,-1],[-2,0],[-2,-1]], [[-1,-2],[-1,-1],[-2,-1]]],"hCode": "HRO"}
+        ]
+      }
+    },
+    "reason": "Map Definition: a tile has too many coordinates",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "MD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": {
+        "tiles": [
+          {"tile":[0,-3],"tCode":"S","rNumber":null},
+          {"tile":[1,-3],"tCode":"S","rNumber":null},
+          {"tile":[2,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-2],"tCode":"S","rNumber":null},
+          {"tile":[3,-1],"tCode":"S","rNumber":null},
+          {"tile":[3,0],"tCode":"S","rNumber":null},
+          {"tile":[1,2],"tCode":"S","rNumber":null},
+          {"tile":[0,3],"tCode":"S","rNumber":null},
+          {"tile":[-1,3],"tCode":"S","rNumber":null},
+          {"tile":[-2,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,2],"tCode":"S","rNumber":null},
+          {"tile":[-3,1],"tCode":"S","rNumber":null},
+          {"tile":[-3,0],"tCode":"S","rNumber":null},
+          {"tile":[-2,-1],"tCode":"S","rNumber":null},
+          {"tile":[-1,-2],"tCode":"S","rNumber":null},
+          {"tile":[0,-2],"tCode":"FO","rNumber":11},
+          {"tile":[1,-2],"tCode":"P","rNumber":12},
+          {"tile":[2,-2],"tCode":"F","rNumber":9},
+          {"tile":[2,-1],"tCode":"P","rNumber":10},
+          {"tile":[2,0],"tCode":"F","rNumber":8},
+          {"tile":[1,1],"tCode":"M","rNumber":3},
+          {"tile":[0,2],"tCode":"FO","rNumber":6},
+          {"tile":[-1,2],"tCode":"F","rNumber":2},
+          {"tile":[-2,2],"tCode":"M","rNumber":5},
+          {"tile":[-2,1],"tCode":"H","rNumber":8},
+          {"tile":[-2,0],"tCode":"D","rNumber":null},
+          {"tile":[-1,-1],"tCode":"H","rNumber":4},
+          {"tile":[0,-1],"tCode":"M","rNumber":6},
+          {"tile":[1,-1],"tCode":"H","rNumber":5},
+          {"tile":[1,0],"tCode":"FO","rNumber":4},
+          {"tile":[0,1],"tCode":"P","rNumber":9},
+          {"tile":[-1,1],"tCode":"P","rNumber":10},
+          {"tile":[-1,0],"tCode":"FO","rNumber":3},
+          {"tile":[0,0],"tCode":"F","rNumber":11}
+        ],
+        "harbors": [
+          {"path":[[[0,-3],[0,-2],[-1,-2]],  [[1,-3],[0,-2],[0,-3]]],   "hCode": "HR"},
+          {"path":[[[2,-3],[1,-2],[1,-3]],   [[2,-3],[2,-2],[1,-2]]],   "hCode": "HRW"},
+          {"path":[[[3,-2],[2,-1],[2,-2]],   [[3,-2],[3,-1],[2,-1]]],   "hCode": "HR"},
+          {"path":[[[3,-1],[3,0],[2,0]],     [[3,0],[2,1],[2,0]]],      "hCode": "HR"},
+          {"path":[[[2,1],[1,2],[1,1]],      [[1,1],[1,2],[0,2]]],      "hCode": "HRB"},
+          {"path":[[[0,2],[-1,3],[-1,2]],    [[-1,2],[-1,3],[-2,3]]],   "hCode": "HRL"},
+          {"path":[[[-2,2],[-2,3],[-3,3]],   [[-2,2],[-3,3],[-3,2]]],   "hCode": "HR"},
+          {"path":[[[-2,1],[-3,2],[-3,1]],   [[-2,0],[-2,1],[-3,1]]],   "hCode": "HRG"},
+          {"path":[[[-1,-1],[-2,0],[-2,-1]], [[-1,-2],[-1,-1],[-2,-1]]],"hCode": "HRO"}
+        ]
+      }
+    },
+    "reason": "Map Definition: missing tiles",
+    "correct": false
+  },
+  {
+    "message": {
+      "event": "MD",
+      "uuid": "123456789ABDCEF",
+      "player": "tester",
+      "value": {
+        "tiles": [
+          {"tile":[0,-3],"tCode":"S","rNumber":null},
+          {"tile":[1,-3],"tCode":"S","rNumber":null},
+          {"tile":[2,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-3],"tCode":"S","rNumber":null},
+          {"tile":[3,-2],"tCode":"S","rNumber":null},
+          {"tile":[3,-1],"tCode":"S","rNumber":null},
+          {"tile":[3,0],"tCode":"S","rNumber":null},
+          {"tile":[2,1],"tCode":"S","rNumber":null},
+          {"tile":[1,2],"tCode":"S","rNumber":null},
+          {"tile":[0,3],"tCode":"S","rNumber":null},
+          {"tile":[-1,3],"tCode":"S","rNumber":null},
+          {"tile":[-2,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,3],"tCode":"S","rNumber":null},
+          {"tile":[-3,2],"tCode":"S","rNumber":null},
+          {"tile":[-3,1],"tCode":"S","rNumber":null},
+          {"tile":[-3,0],"tCode":"S","rNumber":null},
+          {"tile":[-2,-1],"tCode":"S","rNumber":null},
+          {"tile":[-1,-2],"tCode":"S","rNumber":null},
+          {"tile":[0,-2],"tCode":"FO","rNumber":11},
+          {"tile":[1,-2],"tCode":"P","rNumber":12},
+          {"tile":[2,-2],"tCode":"F","rNumber":9},
+          {"tile":[2,-1],"tCode":"P","rNumber":10},
+          {"tile":[2,0],"tCode":"F","rNumber":8},
+          {"tile":[1,1],"tCode":"M","rNumber":3},
+          {"tile":[0,2],"tCode":"FO","rNumber":6},
+          {"tile":[-1,2],"tCode":"F","rNumber":2},
+          {"tile":[-2,2],"tCode":"M","rNumber":5},
+          {"tile":[-2,1],"tCode":"H","rNumber":8},
+          {"tile":[-2,0],"tCode":"D","rNumber":null},
+          {"tile":[-1,-1],"tCode":"H","rNumber":4},
+          {"tile":[0,-1],"tCode":"M","rNumber":6},
+          {"tile":[1,-1],"tCode":"H","rNumber":5},
+          {"tile":[1,0],"tCode":"FO","rNumber":4},
+          {"tile":[0,1],"tCode":"P","rNumber":9},
+          {"tile":[-1,1],"tCode":"P","rNumber":10},
+          {"tile":[-1,0],"tCode":"FO","rNumber":3},
+          {"tile":[0,0],"tCode":"F","rNumber":11}
+        ],
+        "harbors": [
+          {"path":[[[0,-3],[0,-2],[-1,-2]],  [[1,-3],[0,-2],[0,-3]]],   "hCode": "HR"},
+          {"path":[[[3,-2],[2,-1],[2,-2]],   [[3,-2],[3,-1],[2,-1]]],   "hCode": "HR"},
+          {"path":[[[2,1],[1,2],[1,1]],      [[1,1],[1,2],[0,2]]],      "hCode": "HRB"},
+          {"path":[[[0,2],[-1,3],[-1,2]],    [[-1,2],[-1,3],[-2,3]]],   "hCode": "HRL"},
+          {"path":[[[-2,2],[-2,3],[-3,3]],   [[-2,2],[-3,3],[-3,2]]],   "hCode": "HR"},
+          {"path":[[[-2,1],[-3,2],[-3,1]],   [[-2,0],[-2,1],[-3,1]]],   "hCode": "HRG"},
+          {"path":[[[-1,-1],[-2,0],[-2,-1]], [[-1,-2],[-1,-1],[-2,-1]]],"hCode": "HRO"}
+        ]
+      }
+    },
+    "reason": "Map Definition: missing harbors",
     "correct": false
   }
 ]
