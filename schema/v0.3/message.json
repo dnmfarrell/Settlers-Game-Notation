@@ -13,24 +13,24 @@
     },
     "tile": {
       "type": "array",
-      "minSize": 2,
-      "maxSize": 2,
+      "minItems": 2,
+      "maxItems": 2,
       "items": {
         "type": "integer"
       }
     },
     "intersection": {
       "type": "array",
-      "minSize": 3,
-      "maxSize": 3,
+      "minItems": 3,
+      "maxItems": 3,
       "items": {
         "$ref": "#/definitions/tile"
       }
     },
     "path": {
       "type": "array",
-      "minSize": 2,
-      "maxSize": 2,
+      "minItems": 2,
+      "maxItems": 2,
       "items": {
         "$ref": "#/definitions/intersection"
       }
@@ -41,28 +41,29 @@
     },
     "tiles": {
       "type": "array",
-      "minSize": 37,
+      "minItems": 37,
       "items": {
         "type": "object",
-        "allOf": [{
-          "$ref": "#/definitions/tile"
-        }, {
-          "$ref": "#/definitions/tile"
-        }, {
-          "$ref": "#/definitions/tile"
-        }]
+        "properties": {
+          "tile":    { "$ref": "#/definitions/tile" },
+          "tCode":   { "$ref": "#/definitions/tCode"},
+          "rNumber": { "$ref": "#/definitions/rNumber"}
+        },
+        "required": ["tile", "tCode", "rNumber"],
+        "additionalProperties": false
       }
     },
     "harbors": {
       "type": "array",
-      "minSize": 8,
+      "minItems": 8,
       "items": {
         "type": "object",
-        "allOf": [{
-          "$ref": "#/definitions/path"
-        }, {
-          "$ref": "#/definitions/hCode"
-        }]
+        "properties": {
+          "path":  { "$ref": "#/definitions/path" },
+          "hCode": { "$ref": "#/definitions/hCode"}
+        },
+        "required": ["path", "hCode"],
+        "additionalProperties": false
       }
     },
     "resources": {
@@ -247,8 +248,13 @@
     "properties": {
       "event": { "pattern": "^MD$" },
       "value": {
-        "$ref": "#/definitions/tiles",
-        "$ref": "#/definitions/harbors"
+        "type": "object",
+        "properties": {
+          "tiles": { "$ref": "#/definitions/tiles"},
+          "harbors": { "$ref": "#/definitions/harbors"}
+        },
+        "required": ["tiles", "harbors"],
+        "additionalProperties": false
       }
     }
   }, {
