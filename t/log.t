@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 use Test::More;
+use lib 'lib';
 use JSON::Schema::AsType;
 use Mojo::JSON qw/decode_json/;
 
