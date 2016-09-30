@@ -470,8 +470,6 @@ The C<VI> event defines the version of SGN being used in the log. It includes a 
 
 =head2 See Also
 
-L<Settlers-Game|https://github.com/dnmfarrell/Settlers-Game> is my attempt to implement a Settlers game class using SGN.
-
 L<Pioneers|http://pio.sourceforge.net/> an open source implementation of the island colonization game.
 
 L<Catan|http://playcatan.com> the official website for Settlers of Catan.
