@@ -1,5 +1,5 @@
 {
-  "id": "https://github.com/dnmfarrell/Settlers-Game-Notation/schema/v0.4/message.json",
+  "id": "https://raw.githubusercontent.com/dnmfarrell/Settlers-Game-Notation/master/schema/v0.4/message.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {
     "tCode": {
@@ -97,7 +97,7 @@
                 "type": "integer"
               }
             },
-            "minProperties":1,
+            "minProperties": 1,
             "additionalProperties": false
           }
         },
@@ -111,7 +111,7 @@
     }
   },
   "type": "object",
-  "required": ["aCode", "value"],
+  "required":["aCode", "value"],
   "oneOf": [{
     "properties": {
       "aCode": { "pattern": "^BC$" },
@@ -134,7 +134,7 @@
           "cCode": {"$ref": "#/definitions/cCode" },
           "player": { "$ref": "#/definitions/player"}
         },
-        "required": ["cCode"],
+        "required": ["cCode", "player"],
         "additionalProperties": false
       }
     }
@@ -147,7 +147,7 @@
           "path": {"$ref": "#/definitions/path" },
           "player": { "$ref": "#/definitions/player"}
         },
-        "required": ["path"],
+        "required": ["path", "player"],
         "additionalProperties": false
       }
     }
@@ -160,7 +160,7 @@
           "intersection": {"$ref": "#/definitions/intersection" },
           "player": { "$ref": "#/definitions/player"}
         },
-        "required": ["intersection"],
+        "required": ["intersection", "player"],
         "additionalProperties": false
       }
     }
