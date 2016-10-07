@@ -1,18 +1,19 @@
 #!/usr/bin/env perl
+use strict;
+use warnings;
 use Test::More;
-use JSON::Schema::AsType;
+use JSON::Validator;
 use JSON::XS qw/decode_json encode_json/;
 
-my $spec = decode_json( do{ local(@ARGV, $/) = 'schema/v0.4/message.json';<>} );
 my $messages = decode_json( do{ local(@ARGV, $/) = 'test-corpus/messages.json';<>} );
-ok my $schema = JSON::Schema::AsType->new( schema => $spec ), 'load schema';
+my $validator = JSON::Validator->new;
+$validator->schema('schema/v0.4/message.json');
 
-my @data = ();
 for my $msg (@$messages)
 {
-  push(@data, $msg->{message}) if $msg->{correct};
-  my $result = $schema->check($msg->{message}) ? 1 : 0;
-  ok $result == $msg->{correct}, $msg->{reason};
+  my @errors = $validator->validate($msg->{message});
+  my $result = @errors ? 0 : 1;
+  cmp_ok $result, '==', $msg->{correct}, $msg->{reason};
 }
 
 done_testing;
