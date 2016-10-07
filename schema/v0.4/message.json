@@ -1,0 +1,230 @@
+{
+  "id": "https://github.com/dnmfarrell/Settlers-Game-Notation/schema/v0.4/message.json",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "tCode": {
+      "type": "string",
+      "enum": ["D", "F", "FO", "H", "M", "P", "S"]
+    },
+    "player": {
+      "type": "string"
+    },
+    "rNumber": {
+      "type": ["integer", "null"],
+      "minimum": 2,
+      "maximum": 12
+    },
+    "tile": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "integer"
+      }
+    },
+    "intersection": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/definitions/tile"
+      }
+    },
+    "path": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "$ref": "#/definitions/intersection"
+      }
+    },
+    "hCode": {
+      "type": "string",
+      "enum": ["HR", "HRB", "HRG", "HRL", "HRO", "HRW"]
+    },
+    "tiles": {
+      "type": "array",
+      "minItems": 37,
+      "items": {
+        "type": "object",
+        "properties": {
+          "tile":    { "$ref": "#/definitions/tile" },
+          "tCode":   { "$ref": "#/definitions/tCode"},
+          "rNumber": { "$ref": "#/definitions/rNumber"}
+        },
+        "required": ["tile", "tCode", "rNumber"],
+        "additionalProperties": false
+      }
+    },
+    "harbors": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "properties": {
+          "path":  { "$ref": "#/definitions/path" },
+          "hCode": { "$ref": "#/definitions/hCode"}
+        },
+        "required": ["path", "hCode"],
+        "additionalProperties": false
+      }
+    },
+    "resnotation": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "properties": {
+          "player": { "$ref": "#/definitions/player"},
+          "resources": {
+            "type": "object",
+            "properties": {
+              "B": {
+                "type": "integer"
+              },
+              "G": {
+                "type": "integer"
+              },
+              "L": {
+                "type": "integer"
+              },
+              "O": {
+                "type": "integer"
+              },
+              "W": {
+                "type": "integer"
+              }
+            },
+            "minProperties":1,
+            "additionalProperties": false
+          }
+        },
+        "required":["player", "resources"],
+        "additionalProperties": false
+      }
+    },
+    "cCode": {
+      "type": "string",
+      "enum": ["KN", "MO", "RB", "VP", "YP"]
+    }
+  },
+  "type": "object",
+  "required": ["aCode", "value"],
+  "oneOf": [{
+    "properties": {
+      "aCode": { "pattern": "^BC$" },
+      "value": {
+        "type": "object",
+        "properties": {
+          "intersection": {"$ref": "#/definitions/intersection" },
+          "player": { "$ref": "#/definitions/player"}
+        },
+        "required": ["intersection", "player"],
+        "additionalProperties": false
+      }
+    }
+  }, {
+    "properties": {
+      "aCode": { "pattern": "^BD$" },
+      "value": {
+        "type": "object",
+        "properties": {
+          "cCode": {"$ref": "#/definitions/cCode" },
+          "player": { "$ref": "#/definitions/player"}
+        },
+        "required": ["cCode"],
+        "additionalProperties": false
+      }
+    }
+  }, {
+    "properties": {
+      "aCode": { "pattern": "^BR$" },
+      "value": {
+        "type": "object",
+        "properties": {
+          "path": {"$ref": "#/definitions/path" },
+          "player": { "$ref": "#/definitions/player"}
+        },
+        "required": ["path"],
+        "additionalProperties": false
+      }
+    }
+  }, {
+    "properties": {
+      "aCode": { "pattern": "^BS$" },
+      "value": {
+        "type": "object",
+        "properties": {
+          "intersection": {"$ref": "#/definitions/intersection" },
+          "player": { "$ref": "#/definitions/player"}
+        },
+        "required": ["intersection"],
+        "additionalProperties": false
+      }
+    }
+  }, {
+    "properties": {
+      "aCode": { "pattern": "^DM$" },
+      "value": {
+        "type": "object",
+        "properties": {
+          "tiles": { "$ref": "#/definitions/tiles"},
+          "harbors": { "$ref": "#/definitions/harbors"}
+        },
+        "required": ["tiles", "harbors"],
+        "additionalProperties": false
+      }
+    }
+  }, {
+    "properties": {
+      "aCode": { "pattern": "^MR$" },
+      "value": {
+        "type": "object",
+        "properties": {
+          "tile": {"$ref": "#/definitions/tile" }
+        },
+        "required": ["tile"],
+        "additionalProperties": false
+      }
+    }
+  }, {
+    "properties": {
+      "aCode": { "pattern": "^ST$" },
+      "value": {"$ref": "#/definitions/resnotation" }
+    }
+  }, {
+    "properties": {
+      "aCode": { "pattern": "^TR$" },
+      "value": {"$ref": "#/definitions/resnotation" }
+    }
+  }, {
+    "properties": {
+      "aCode": { "pattern": "^RD$" },
+      "value": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 12
+          }
+        },
+        "required": ["result"],
+        "additionalProperties": false
+      }
+    }
+  }, {
+    "properties": {
+      "aCode": { "pattern": "^PD$" },
+      "value": {
+        "type": "object",
+        "properties": {
+          "cCode": {"$ref": "#/definitions/cCode" }
+        },
+        "required": ["cCode"],
+        "additionalProperties": false
+      }
+    }
+  }]
+}
