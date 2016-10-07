@@ -149,7 +149,6 @@
         },
         { "player": "2",
           "resources": {
-            "L": 8
           }
         }
       ]
@@ -162,11 +161,9 @@
       "aCode": "TR",
       "value": { "resources": [
         { "player": "one",
-          "B": 2,
           "L": -2
         },
         { "player": "two",
-          "B": 2,
           "X": -2
         }
       ] }
