@@ -89,6 +89,14 @@
   },
   {
     "message": {
+      "aCode": "RD",
+      "value": { "result": 1 }
+    },
+    "reason": "Can't roll a 1",
+    "correct": false
+  },
+  {
+    "message": {
       "aCode": "MR",
       "value": { "tile": [2,1] }
     },
