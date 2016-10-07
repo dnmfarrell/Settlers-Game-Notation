@@ -16,17 +16,16 @@ This is a working draft of the SGN spec, and all feedback is welcome.
 
 =head2 JSON Schema
 
-The F<schema/message.json> file is a draft schema for an SGN message, and F<schema/log.json> defines a log of SGN.
+The F<schema/message.json> file is a draft schema for an SGN message.
 
 =head2 Tests
 
-The F<t> directory has test scripts in Perl and JavaScript. F<test-corpus/messages.json> contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require L<JSON::Schema::AsType|https://metacpan.org/pod/JSON::Schema::AsType> and L<Mojolicious|https://metacpan.org/pod/Mojolicious>:
+The F<t> directory has test scripts in Perl and JavaScript. F<test-corpus/messages.json> contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require L<JSON::Schema::AsType|https://metacpan.org/pod/JSON::Schema::AsType> and L<JSON::XS|https://metacpan.org/pod/JSON::XS>:
 
   $ prove -l
-  t/log.t ....... ok
   t/messages.t .. ok
   All tests successful.
-  Files=2, Tests=63,  7 wallclock secs ( 0.03 usr  0.01 sys +  1.40 cusr  0.05 csys =  1.49 CPU)
+  Files=1, Tests=63,  7 wallclock secs ( 0.03 usr  0.01 sys +  1.40 cusr  0.05 csys =  1.49 CPU)
   Result: PASS
 
 If you prefer node.js, you can run the JavaScript tests, which requires L<ajv|https://github.com/epoberezkin/ajv>:
@@ -47,47 +46,16 @@ If you prefer node.js, you can run the JavaScript tests, which requires L<ajv|ht
 
 =head2 Definition
 
-A valid SGN document is an array of Messages. The idea is to capture the entirety of a game of Settlers from setup to end. The order of messages is always sequential: an SGN document could describe just the game setup for example. But it couldn't describe the deployment phase unless the setup phase is also defined earlier in the same document.
+A valid SGN document a string of newline-separated JSON messages. The idea is to capture the entirety of a game of Settlers from setup to end. The order of messages is always sequential: an SGN document could describe just the game setup for example. But it couldn't describe the deployment phase unless the setup phase is also defined earlier in the same document.
 
 =head2 Messages
 
-Every event in a game of Settlers is described in a message format. A message is a JSON object with the following properties:
+Every action in a game of Settlers is described in a message format. A message is a JSON object with the following properties:
 
   Name    Value
   ------------------------------------------------------------------------------
-  uuid    Universally Unique IDentifier, used to identify individual game events
-  player  The player # (or "A" for admin if it came from the server)
-  event   The two letter event code (see Events below)
-  value   The value associated with the event code (see Events below)
-  batch   The sequence number of the message e.g. message 1 of 2 is: [1,2]
-
-An example admin message for declaring player 2 has joined the game:
-
-  {
-    "uuid": "1C68D574-937F-11E5-AF19-C9E87C9D2E84",
-    "player": "A",
-    "event": "PA",
-    "value": {"player": "2"},
-  }
-
-Here is a batch of two messages ending the round and the deployment phase:
-
-  {
-    "uuid": "1C68D574-937F-11E5-AF19-C9E87C9D2E84",
-    "player": "A",
-    "event": "RE",
-    "value": {"round":2},
-    "batch": [1,2]
-  },
-  {
-    "uuid": "1C68D574-937F-11E5-AF19-C9E87C9D2E84",
-    "player": "A",
-    "event": "PE",
-    "value": {"phase": "Deployment"},
-    "batch": [2,2]
-  }
-
-Batching is useful for implementation: a client doesn't have to redraw the screen until it has finished processing an entire batch of messages, rather than redrawing the screen every time it processes a single message.
+  aCode   The two letter action code (see Actions below)
+  value   The value associated with the action code (see Events below)
 
 =head2 Hexes
 
@@ -111,7 +79,7 @@ This is the same map with the sea tiles represented by tildes (incorrect notatio
         ~~~~  -2,2   -1,2   0,2  ~~~~
            ~~~~   ~~~~   ~~~~  ~~~~
 
-Hex notation is used to define the layout of the board tiles and the location of the robber.
+Hex notation is used to define the layout of the board tiles, and other game objects like the location of the robber.
 
 =head2 Tile Types
 
@@ -257,19 +225,16 @@ Resources notation records which resources and in what quantity are being traded
 It uses the resource code as the key and the value as the quantity. Both quantities gained and lost are listed. So a trade between player 1 and player 2 for 2 lumber for a wool looks like:
 
   [
-    {"player":"1","L":-2,"W": 1},
-    {"player":"2","L": 2,"W":-1}
+    {"player":"1", resources:{"L":-2,"W": 1},
+    {"player":"2", resources:{"L": 2,"W":-1}
   ]
 
 The implication of this notation is that all resources must balance. For trades with the bank, C<B> represents the bank. Here is a bank trade by player 2, losing 4 grain to get a brick:
 
   [
-    {"player":"2", "G":-4,"B": 1},
-    {"player":"B", "G": 4,"B":-1}
+    {"player":"2", resources:{"G":-4,"B": 1},
+    {"player":"B", resources:{"G": 4,"B":-1}
   ]
-
-Resource notation isn't just for trades. It's used for gains from resource production, stealing resources with the robber and conceding resources back to the
-bank.
 
 =head2 Assets
 
@@ -277,12 +242,12 @@ Players may accumulate these throughout the game. There are four normal and two 
 
   Name              How to get it
   ---------------------------------------------------
-  Development card  Build development card event (BD)
-  Settlement        Build settlement event (BS)
-  City              Build city event (BC)
-  Road              Build road event (BR)
-  Largest army      Largest Army event (LA)
-  Longest road      Longest Road event (LR)
+  Development card  Build development card action (BD)
+  Settlement        Build settlement action (BS)
+  City              Build city action (BC)
+  Road              Build road action (BR)
+  Largest army      Largest Army - gained by playing at least 3 knight cards, and more than any other player
+  Longest road      Longest Road - gained by building at least 5 connected roads, and more than any other player
 
 There are 5 types of development cards:
 
@@ -294,177 +259,55 @@ There are 5 types of development cards:
   VP     Victory Point
   YP     Year of plenty
 
-=head2 Events
+=head2 Actions
 
-Events are the things which drive the game: player actions, dice rolls etc. Every entry in SGN is an event, consisting of an event code and a JSON value.
+Actions are taken by players. Every entry in SGN is an action, consisting of an action code and a JSON object:
 
-  Code Name                    Value
+  aCode Name                    Value
   --------------------------------------------------------------------------------------
-  BC   Build City              {"intersection":<intersection coordinates>}
-  BD   Build Development card  {"cCode": "KN|MO|RB|VP|YP"}
-  BR   Build Road              {"path":<path coordinates>}
-  BS   Build Settlement        {"intersection":<intersection coordinates>}
-  CH   Chat                    {"msg": "msg text"}
-  CR   Concede Resources       {"resources":<resource notation>}
-  DR   Dice Roll               {"result":#}
-  GO   Game Over               {}
-  LA   Largest Army            {"strength":#}
-  LR   Longest Road            {"length":#}
-  MD   Map Define              {"tiles":[...], "harbors":[..]}
-  MO   Monopoly                {"resources":<resource notation>}
-  PA   Player Add              {"player": "#", "name": "foo bar", "avatar":"/path/to/avatar.jpg"}
-  PD   Play Development card   {"cCode": "KN|MO|RB|VP|YP"}
-  PE   Phase End               {"phase": "Setup|Deployment|Play|End"}
-  PS   Phase Start             {"phase": "Setup|Deployment|Play|End"}
-  RA   Robber Activate         {}
-  RD   Robber Deactivate       {}
-  RE   Round End               {"round": #}
-  RM   Robber Move             {"tile": <tile coordinates>}
-  RP   Resource Production     {"resources": <resource notation> }
-  RR   Robber Rob              {"resources": <resource notation> }
-  RS   Round Start             {"round": #}
-  TA   Trade Accept            {"uuid":"#"}
-  TB   Trade Bank              {"resources":<resource notation>}
-  TC   Trade Cancel            {"uuid":"#"}
-  TD   Trade Decline           {"uuid":"#"}
-  TE   Turn End                {}
-  TO   Trade Offer             {"resources":<resource notation>}
-  TR   Trade Resources         {"uuid":"#", "resources":<resource notation>}
-  TS   Turn Start              {}
-  VI   Version Information     {"version":0.3, "schema_uri":"https://github.com/dnmfarrell/Settlers-Game-Notation/schema/v0.3/message.json" }
-  YP   Year of Plenty          {"resources":<resource notation>}
+  BC    Build City              {"player":"#","intersection":<intersection coordinates>}
+  BD    Build Development card  {"player":"#",cCode": "KN|MO|RB|VP|YP"}
+  BR    Build Road              {"player":"#",path":<path coordinates>}
+  BS    Build Settlement        {"player":"#",intersection":<intersection coordinates>}
+  DM    Define Map              {"tiles":[...], "harbors":[...]}
+  MR    Move Robber             {"tile": <tile coordinates>}
+  PD    Play Development card   {"cCode": "KN|MO|RB|VP|YP"}
+  RD    Roll Dice               {"result":#}
+  ST    Steal                   {"resources":<resource notation>}
+  TR    Trade                   {"resources":<resource notation>}
 
 =head2 Trading
 
 Trading is a big part of Settlers. Players may trade with each other or with the Bank.
 
-Bank trades are described using the trade bank event. For example, here's a complete bank trade message:
+Bank trades are described using the trade action. For example, here's a trade between the Bank ("B") and player 2:
 
   {
-    "event": "TB",
-    "value":{
-      "resources":[{"player":"B","B":"-1","O":"4"},{"player":"2","B":"1","O":"-4"}]
+    "aCode": "TR",
+    "value":[{"player":"B","resources":{"B":"-1","O":"4"}},{"player":"2","resources":{"B":"1","O":"-4"}}]
     }
-    "uuid":"#",
-    "player":"2"
   }
-
-Player trades have two parts: offer and acceptance. A Player may offer a trade to other players with resource notation and a universal unique id (uuid).
-
-The trade offer can be ended with:
-
-=over 4
-
-=item * Trade cancel
-
-The offering player cancels the offer using the trade cancel event.
-
-=item * Trade decline
-
-The receiving player declines the offer using the trade decline event.
-
-=item * Trade accept
-
-The other player accepts the trade offer using the trade accept event.
-
-=item * End turn
-
-If a player's turn ends, all outstanding trade offers are canceled. No Trade Cancel events are issued for this.
-
-=back
 
 Here is an example trade between player 1 and player 2:
 
   {
-    "event":"TO",
-    "player":"1",
+    "aCode":"TO",
     "value": {"resources":[{"player":"1","B":-2,"W":1},{"player":"2","B":2,"W":-1}]},
-    "uuid":"1234-56789-01234"
   },
-  {
-    "event":"TA",
-    "player":"2",
-    "value": {"uuid":"1234-56789-01234"},
-    "uuid": "#"
-  },
-  {
-    "event":"TR",
-    "player":"A",
-    "value":{"resources":[{"player":"1","B":-2,"W":1},{"player":"3","B":2,"W":-1}]},
-    "uuid": "#"
-  }
 
-The exchange begins with a Trade offer from player 1 for 1 wool in exchange for 2 brick to player 2. Player 2 accepts the offer, and this triggers the Trade event.
-
-=head2 Chat
-
-Player chat uses the event code C<CH>. It provides a key/pair of the player name and the chat text. Here's a conversation:
-
-  {
-    "event": "CH",
-    "player": "1",
-    "uuid": "#",
-    "value":{"msg":"Let's do this!"},
-  },
-  {
-    "event": "CH",
-    "player": "2",
-    "uuid": "#",
-    "value":{"msg":"I'm gonna get you!"},
-  }
-
-Chat is not necessary for game notation, but helps with the implementation of a game server using game notation. Server or referee chat messages have the player id C<A> for admin.
-
-=head2 Phases
-
-=over 4
-
-=item 1 Setup
-
-Setup involves adding players and defining the map. The first event in every game log should be to start the Setup phase.
-
-=item 2 Deployment
-
-Players can deploy settlements and roads in the deployment phase according to the rules of Settlers. Player 1 always goes first.
-
-=item 3 Play
-
-This is the regular Settlers play action.
-
-=item 4 End
-
-The game is over as a player has won.
-
-=back
-
-=head2 Rounds
-
-A round is one cycle of every player's turn. The Deployment phase has 2 rounds and the Play phase has as many rounds as required to end the game.
-
-=head2 Turns
-
-During the Deployment phase, a player must build a settlement and a road, then their turn ends. No other actions during Deployment are permitted. Player 1 always goes first, then player 2, and so on. When the last player has completed their first Deployment phase turn, the turn sequence then reverses so that the last player immediately gets another Deployment phase turn. Deployment is over when the first player has deployed two settlements and two roads.
-
-During the Play phase, the turn sequence begins with Player 1. They may play a development card. The next action they must take is to roll the dice. After the dice roll has been resolved, they may offer and received trade offers from other players and they can build assets. Once player 1 ends their turn, player 2 will have the next turn and so on.
+The exchange begins with a Trade offer from player 1 for 1 wool in exchange for 2 brick to player 2. Player 2 accepts the offer, and this triggers the Trade action.
 
 =head2 Players
 
-Players are just string identifiers that refer to a player of the game, an administrator/referee or the bank. The examples in this document refer to players by stringified numbers like C<"1">, but this is not necessary. The string must be unique identifier for the player, so it's fine to use a name instead: C<"David">.
+Players are just string identifiers that refer to a player of the game or the banker. Player "1" is always the player that goes first, up until player "6" (the maximum number of players).
 
-Two player names are special and reserved: C<"B"> refers to the banker and C<"A"> refers to the administrator, server or refereee of the game.
-
-
-=head2 Version
-
-The C<VI> event defines the version of SGN being used in the log. It includes a schema URI which can be used to download the JSON schema for the SGN version.
+One player name is special and reserved: C<"B"> refers to the banker.
 
 =head1 FAQ
 
 =over 4
 
 =item * I<Is SGN case-sensitive?> YES!
-
-=item * I<Why is there no Road Building event?> There is no need for it. When the Play Development card event occurs with a type code of C<RB> that indicates road building is active. The player can then build roads using the build road event.
 
 =back
 
@@ -476,9 +319,13 @@ L<Catan|http://playcatan.com> the official website for Settlers of Catan.
 
 =head2 Version
 
-0.03
+0.04
 
 =head2 Changes
+
+=head3 0.04 2016-10-06
+
+Events are now called Actions. The idea is to strip out anything that can be inferred and only record what is left. Server type attributes like "UUID" are not required. In some cases, it was necessary to add a C<player> property to some actions, to avoid ambiguity when playing an expanded game of Settlers and there is an extra build phase per player turn.
 
 =head3 0.03 2015-12-24
 
