@@ -20,7 +20,7 @@ The F<schema/message.json> file is a draft schema for an SGN message.
 
 =head2 Tests
 
-The F<t> directory has test scripts in Perl and JavaScript. F<test-corpus/messages.json> contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require L<JSON::Schema::AsType|https://metacpan.org/pod/JSON::Schema::AsType> and L<JSON::XS|https://metacpan.org/pod/JSON::XS>:
+The F<t> directory has test scripts in Perl and JavaScript. F<test-corpus/messages.json> contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require L<JSON::Validator|https://metacpan.org/pod/JSON::Validator> and L<JSON::XS|https://metacpan.org/pod/JSON::XS>:
 
   $ prove -l
   t/messages.t .. ok
@@ -33,13 +33,6 @@ If you prefer node.js, you can run the JavaScript tests, which requires L<ajv|ht
   $ t/messages.js
   ok 1 - load schema
   ok 2 - Build City
-  ok 3 - provided tile not intersection
-  ok 4 - provided path not intersection
-  ok 5 - Build Settlement
-  ok 6 - Build Road
-  ok 7 - Provided resources instead of path
-  ok 8 - Build development card - knight
-  ok 9 - Development card type illegal
   ...
   ok 61 - Map Definition: missing harbors
   1..61
