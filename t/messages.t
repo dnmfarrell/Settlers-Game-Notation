@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use Test::More;
 use JSON::Schema::AsType;
-use Mojo::JSON qw/decode_json encode_json/;
+use JSON::XS qw/decode_json encode_json/;
 
 my $spec = decode_json( do{ local(@ARGV, $/) = 'schema/v0.4/message.json';<>} );
 my $messages = decode_json( do{ local(@ARGV, $/) = 'test-corpus/messages.json';<>} );
