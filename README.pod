@@ -14,13 +14,17 @@ As far as this author is aware, there is no formal, public and free notation for
 
 This is a mature draft of the SGN spec, and all feedback is welcome. As of v0.4, the spec is "good enough" to be used for development - complete games can be recorded with SGN. Future changes are anticipated to be refinements of the existing spec, rather than wholesale changes.
 
+=head2 JSON Schema
+
+The file L<message.json|schema/v0.4/message.json> is a complete JSON schema for an SGN message.
+
 =head2 Example
 
-A complete example game log of v0.4 SGN is included in this repo, here: `test-corpus/game-log-v0.4.json`.
+A complete example game log of v0.4 SGN is included in this repo, L<game-log-v0.4.json|test-corpus/game-log-v0.4.json>. This includes over 10 rounds of play, using every example message from this schema.
 
 =head2 Tests
 
-The F<t> directory has test scripts in Perl and JavaScript. F<test-corpus/messages.json> contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require L<JSON::Validator|https://metacpan.org/pod/JSON::Validator> and L<JSON::XS|https://metacpan.org/pod/JSON::XS>:
+The L<t|t> directory has test scripts in Perl and JavaScript. L<messages.json|test-corpus/messages.json> contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require L<JSON::Validator|https://metacpan.org/pod/JSON::Validator> and L<JSON::XS|https://metacpan.org/pod/JSON::XS>:
 
   $ prove -l
   prove -l
@@ -52,10 +56,6 @@ Every action in a game of Settlers is described in a message format. A message i
   player  The number of the player making the action ("1" - "6")
   aCode   The two letter action code (see Actions below)
   value   The value associated with the action code (see Events below)
-
-=head2 JSON Schema
-
-The F<schema/v0.4/message.json> file is a JSON schema for an SGN message.
 
 =head2 Hexes
 
