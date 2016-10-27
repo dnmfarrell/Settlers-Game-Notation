@@ -1,46 +1,52 @@
 [
   {
     "message": {
+      "player": "1",
       "aCode": "BC",
-      "value": { "player": "1", "intersection": [[0,0], [0,1], [1,0]] }
+      "value": { "intersection": [[0,0], [0,1], [1,0]] }
     },
     "reason": "Build City",
     "correct": true
   },
   {
     "message": {
+      "player": "1",
       "aCode": "BC",
-      "value": { "player": "1","tile": [0,0] }
+      "value": { "tile": [0,0] }
     },
     "reason": "provided tile not intersection",
     "correct": false
   },
   {
     "message": {
+      "player": "1",
       "aCode": "BS",
-      "value": { "player": "1","path": [[[0,0], [0,1], [1,0]],[[0,0], [0,1], [1,0]]] }
+      "value": { "path": [[[0,0], [0,1], [1,0]],[[0,0], [0,1], [1,0]]] }
     },
     "reason": "provided path not intersection",
     "correct": false
   },
   {
     "message": {
+      "player": "1",
       "aCode": "BS",
-      "value": { "player": "1","intersection": [[0,0], [0,1], [1,0]] }
+      "value": { "intersection": [[0,0], [0,1], [1,0]] }
     },
     "reason": "Build Settlement",
     "correct": true
   },
   {
     "message": {
+      "player": "1",
       "aCode": "BR",
-      "value": { "player": "1","path": [[[0,0], [0,1], [1,0]],[[0,0], [0,1], [1,0]]] }
+      "value": { "path": [[[0,0], [0,1], [1,0]],[[0,0], [0,1], [1,0]]] }
     },
     "reason": "Build Road",
     "correct": true
   },
   {
     "message": {
+      "player": "1",
       "aCode": "BR",
       "value": { "player": "1","resources": []}
     },
@@ -49,22 +55,25 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "BD",
-      "value": { "player": "1","cCode": "KN" }
+      "value": { "cCode": "KN" }
     },
     "reason": "Build development card - knight",
     "correct": true
   },
   {
     "message": {
+      "player": "1",
       "aCode": "BD",
-      "value": { "player": "1","cCode": "SO" }
+      "value": { "cCode": "SO" }
     },
     "reason": "Development card type illegal",
     "correct": false
   },
   {
     "message": {
+      "player": "1",
       "aCode": "BD",
       "value": { "cCode": "SN" }
     },
@@ -73,6 +82,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "RD",
       "value": { "result": 5 }
     },
@@ -81,6 +91,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "RD",
       "value": { "result": 13 }
     },
@@ -89,6 +100,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "RD",
       "value": { "result": 1 }
     },
@@ -97,6 +109,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "MR",
       "value": { "tile": [2,1] }
     },
@@ -105,6 +118,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "ST",
       "value": { "resources": [] }
     },
@@ -113,6 +127,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "ST"
     },
     "reason": "Missing value key/pair",
@@ -120,6 +135,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "TR",
       "value": [
         { "player": "1",
@@ -141,6 +157,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "TR",
       "value": [
         { "player": "1",
@@ -158,6 +175,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "TR",
       "value": { "resources": [
         { "player": "one",
@@ -173,6 +191,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "DM",
       "value": {
         "tiles": [
@@ -232,8 +251,8 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "DM",
-      "player": "tester",
       "value": {
         "tiles": [
           {"tile":[0,-3],"tCode":"S","rNumber":null},
@@ -292,6 +311,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "DM",
       "value": {
         "tiles": [
@@ -351,6 +371,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "DM",
       "value": {
         "tiles": [
@@ -410,6 +431,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "DM",
       "value": {
         "tiles": [
@@ -469,6 +491,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "DM",
       "value": {
         "tiles": [
@@ -527,6 +550,7 @@
   },
   {
     "message": {
+      "player": "1",
       "aCode": "DM",
       "value": {
         "tiles": [

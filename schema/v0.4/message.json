@@ -70,40 +70,31 @@
         "additionalProperties": false
       }
     },
-    "resnotation": {
-      "type": "array",
-      "minItems": 2,
-      "maxItems": 2,
-      "items": {
-        "type": "object",
-        "properties": {
-          "player": { "$ref": "#/definitions/player"},
-          "resources": {
-            "type": "object",
-            "properties": {
-              "B": {
-                "type": "integer"
-              },
-              "G": {
-                "type": "integer"
-              },
-              "L": {
-                "type": "integer"
-              },
-              "O": {
-                "type": "integer"
-              },
-              "W": {
-                "type": "integer"
-              }
-            },
-            "minProperties": 1,
-            "additionalProperties": false
-          }
+    "resources": {
+      "type": "object",
+      "properties": {
+        "B": {
+          "type": "integer"
         },
-        "required":["player", "resources"],
-        "additionalProperties": false
-      }
+        "G": {
+          "type": "integer"
+        },
+        "L": {
+          "type": "integer"
+        },
+        "O": {
+          "type": "integer"
+        },
+        "W": {
+          "type": "integer"
+        }
+      },
+      "minProperties": 1,
+      "additionalProperties": false
+    },
+    "rCode": {
+      "type": "string",
+      "enum": ["B", "G", "L", "O", "W"]
     },
     "cCode": {
       "type": "string",
@@ -111,61 +102,62 @@
     }
   },
   "type": "object",
-  "required":["aCode", "value"],
+  "required":["aCode", "value", "player"],
   "oneOf": [{
     "properties": {
+      "player": { "$ref": "#/definitions/player" },
       "aCode": { "pattern": "^BC$" },
       "value": {
         "type": "object",
         "properties": {
-          "intersection": {"$ref": "#/definitions/intersection" },
-          "player": { "$ref": "#/definitions/player"}
+          "intersection": {"$ref": "#/definitions/intersection" }
         },
-        "required": ["intersection", "player"],
+        "required": ["intersection"],
         "additionalProperties": false
       }
     }
   }, {
     "properties": {
+      "player": { "$ref": "#/definitions/player" },
       "aCode": { "pattern": "^BD$" },
       "value": {
         "type": "object",
         "properties": {
-          "cCode": {"$ref": "#/definitions/cCode" },
-          "player": { "$ref": "#/definitions/player"}
+          "cCode": {"$ref": "#/definitions/cCode" }
         },
-        "required": ["cCode", "player"],
+        "required": ["cCode"],
         "additionalProperties": false
       }
     }
   }, {
     "properties": {
+      "player": { "$ref": "#/definitions/player" },
       "aCode": { "pattern": "^BR$" },
       "value": {
         "type": "object",
         "properties": {
-          "path": {"$ref": "#/definitions/path" },
-          "player": { "$ref": "#/definitions/player"}
+          "path": {"$ref": "#/definitions/path" }
         },
-        "required": ["path", "player"],
+        "required": ["path"],
         "additionalProperties": false
       }
     }
   }, {
     "properties": {
+      "player": { "$ref": "#/definitions/player" },
       "aCode": { "pattern": "^BS$" },
       "value": {
         "type": "object",
         "properties": {
-          "intersection": {"$ref": "#/definitions/intersection" },
-          "player": { "$ref": "#/definitions/player"}
+          "intersection": {"$ref": "#/definitions/intersection" }
         },
-        "required": ["intersection", "player"],
+        "required": ["intersection"],
         "additionalProperties": false
       }
     }
   }, {
     "properties": {
+      "player": { "$ref": "#/definitions/player" },
       "aCode": { "pattern": "^DM$" },
       "value": {
         "type": "object",
@@ -179,6 +171,7 @@
     }
   }, {
     "properties": {
+      "player": { "$ref": "#/definitions/player" },
       "aCode": { "pattern": "^MR$" },
       "value": {
         "type": "object",
@@ -191,16 +184,49 @@
     }
   }, {
     "properties": {
+      "player": { "$ref": "#/definitions/player" },
       "aCode": { "pattern": "^ST$" },
-      "value": {"$ref": "#/definitions/resnotation" }
+      "value": {
+        "type": "array",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "resources": {"$ref": "#/definitions/resources" },
+              "player":{ "$ref": "#/definitions/player" }
+            },
+            "required": ["resources", "player"],
+            "additionalProperties": false
+          }
+        ],
+        "minSize":2,
+        "maxSize":2
+      }
     }
   }, {
     "properties": {
+      "player": { "$ref": "#/definitions/player" },
       "aCode": { "pattern": "^TR$" },
-      "value": {"$ref": "#/definitions/resnotation" }
+      "value": {
+        "type": "array",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "resources": {"$ref": "#/definitions/resources" },
+              "player":{ "$ref": "#/definitions/player" }
+            },
+            "required": ["resources", "player"],
+            "additionalProperties": false
+          }
+        ],
+        "minSize":2,
+        "maxSize":2
+      }
     }
   }, {
     "properties": {
+      "player": { "$ref": "#/definitions/player" },
       "aCode": { "pattern": "^RD$" },
       "value": {
         "type": "object",
@@ -217,11 +243,20 @@
     }
   }, {
     "properties": {
+      "player": { "$ref": "#/definitions/player" },
       "aCode": { "pattern": "^PD$" },
       "value": {
         "type": "object",
         "properties": {
-          "cCode": {"$ref": "#/definitions/cCode" }
+          "cCode": {"$ref": "#/definitions/cCode" },
+          "rCodes": {
+            "type": "array",
+            "items": [
+                {"$ref": "#/definitions/cCode" }
+            ],
+            "minSize":1,
+            "maxSize":2
+          }
         },
         "required": ["cCode"],
         "additionalProperties": false
