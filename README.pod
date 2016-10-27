@@ -4,7 +4,7 @@
 
 =head1 Settlers Game Notation
 
-This document defines a notation for the game island colonization game Settlers, called "Settlers Game Notation" (SGN). SGN is represented as JSON and is designed to capture "what happened" for a game of Settlers.
+This document defines a notation for the game island colonization game Settlers, called "Settlers Game Notation" (SGN). SGN is represented as JSON and is designed to capture "what happened" for a game of Settlers. However, just like with Chess notation, many actions can be implied without being logged. For instance it is not necessary to record an "end turn" action, as the next player rolling the dice implies that the prior player's turn is finished. This philosophy helps to keep the notation clean, lean and simple.
 
 =head2 Goal
 
@@ -12,21 +12,23 @@ As far as this author is aware, there is no formal, public and free notation for
 
 =head2 Status
 
-This is a working draft of the SGN spec, and all feedback is welcome.
+This is a mature draft of the SGN spec, and all feedback is welcome. As of v0.4, the spec is "good enough" to be used for development - complete games can be recorded with SGN. Future changes are anticipated to be refinements of the existing spec, rather than wholesale changes.
 
-=head2 JSON Schema
+=head2 Example
 
-The F<schema/message.json> file is a draft schema for an SGN message.
+A complete example game log of v0.4 SGN is included in this repo, here: `test-corpus/game-log-v0.4.json`.
 
 =head2 Tests
 
 The F<t> directory has test scripts in Perl and JavaScript. F<test-corpus/messages.json> contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require L<JSON::Validator|https://metacpan.org/pod/JSON::Validator> and L<JSON::XS|https://metacpan.org/pod/JSON::XS>:
 
   $ prove -l
+  prove -l
   t/messages.t .. ok
   All tests successful.
-  Files=1, Tests=63,  7 wallclock secs ( 0.03 usr  0.01 sys +  1.40 cusr  0.05 csys =  1.49 CPU)
+  Files=1, Tests=25,  0 wallclock secs ( 0.02 usr  0.01 sys +  0.19 cusr  0.02 csys =  0.24 CPU)
   Result: PASS
+
 
 If you prefer node.js, you can run the JavaScript tests, which requires L<ajv|https://github.com/epoberezkin/ajv>:
 
@@ -34,8 +36,8 @@ If you prefer node.js, you can run the JavaScript tests, which requires L<ajv|ht
   ok 1 - load schema
   ok 2 - Build City
   ...
-  ok 61 - Map Definition: missing harbors
-  1..61
+  ok 25 - Map Definition: missing harbors
+  1..25
 
 =head2 Definition
 
@@ -47,8 +49,13 @@ Every action in a game of Settlers is described in a message format. A message i
 
   Name    Value
   ------------------------------------------------------------------------------
+  player  The number of the player making the action ("1" - "6")
   aCode   The two letter action code (see Actions below)
   value   The value associated with the action code (see Events below)
+
+=head2 JSON Schema
+
+The F<schema/v0.4/message.json> file is a JSON schema for an SGN message.
 
 =head2 Hexes
 
@@ -74,23 +81,23 @@ This is the same map with the sea tiles represented by tildes (incorrect notatio
 
 Hex notation is used to define the layout of the board tiles, and other game objects like the location of the robber.
 
-=head2 Tile Types
+=head2 Tile Codes
 
-A tile can be any one of the below:
+A tile can be any one of the `tCode` values below:
 
-  Code Type
+  tCode Type
   --------------
-  H    Hills
-  D    Desert
-  M    Mountains
-  S    Sea
-  F    Fields
-  FO   Forest
-  P    Pastures
+  H     Hills
+  D     Desert
+  M     Mountains
+  S     Sea
+  F     Fields
+  FO    Forest
+  P     Pastures
 
 =head2 Resource Number
 
-A tile can have one resource number on it, valid numbers are between 2-6 and 8-12. There is also a limit on the frequency of resource numbers. These are all the available resource numbers for a basic game:
+A tile can have one resource number on it (the `rNumber`), valid numbers are between 2-6 and 8-12. There is also a limit on the frequency of resource numbers. These are all the available resource numbers for a basic game:
 
   2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12
 
@@ -130,16 +137,16 @@ Paths are used to define where harbors and roads are placed.
 
 =head2 Harbors
 
-Harbors are placed on paths adjacent to sea tiles. There are 6 harbor types:
+Harbors are placed on paths adjacent to sea tiles. There are 6 harbor codes (`hCode`):
 
-  Code  Type
+  hCode  Type
   --------------------
-  HR    Generic Harbor
-  HRB   Brick Harbor
-  HRG   Grain Harbor
-  HRL   Lumber Harbor
-  HRO   Ore Harbor
-  HRW   Wool Harbor
+  HR     Generic Harbor
+  HRB    Brick Harbor
+  HRG    Grain Harbor
+  HRL    Lumber Harbor
+  HRO    Ore Harbor
+  HRW    Wool Harbor
 
 Typical maps will have 4 generic harbors and 1 of every other kind.
 
@@ -201,21 +208,21 @@ Every tile is listed with its coordinates, type code and resource number. C<null
 
 =head2 Resources
 
-There are 5 types of resources:
+There are 5 types of resources, defined by their `rCode`:
 
-  Code  Type
+  rCode  Type
   ------------
-  B     Brick
-  G     Grain
-  L     Lumber
-  O     Ore
-  W     Wool
+  B      Brick
+  G      Grain
+  L      Lumber
+  O      Ore
+  W      Wool
 
 =head2 Resources notation
 
 Resources notation records which resources and in what quantity are being traded by players with the bank or with each other.
 
-It uses the resource code as the key and the value as the quantity. Both quantities gained and lost are listed. So a trade between player 1 and player 2 for 2 lumber for a wool looks like:
+It uses the resource code (`rCode`) as the key and the value as the quantity. Both quantities gained and lost are listed. So a trade between player 1 and player 2 for 2 lumber for a wool looks like:
 
   [
     {"player":"1", resources:{"L":-2,"W": 1},
@@ -264,10 +271,20 @@ Actions are taken by players. Every entry in SGN is an action, consisting of an 
   BS    Build Settlement        {"player":"#",intersection":<intersection coordinates>}
   DM    Define Map              {"tiles":[...], "harbors":[...]}
   MR    Move Robber             {"tile": <tile coordinates>}
-  PD    Play Development card   {"cCode": "KN|MO|RB|VP|YP"}
+  PD    Play Development card   {"cCode": "KN|MO|RB|VP|YP", "rCodes":[]}
   RD    Roll Dice               {"result":#}
   ST    Steal                   {"resources":<resource notation>}
   TR    Trade                   {"resources":<resource notation>}
+
+Play Development card has an optional value: `rCodes`. This is required when playing Year of Plenty or Monopoly development cards and is an array containing the resources codes for the event. Monopoly can only ever be declared on one resource. Here is an example of playing Monopoly for Ore:
+
+  {"value":{"rCodes":["O"],"cCode":"MO"},"player":"2","aCode":"PD"}
+
+The player using Year of Plenty can declare up to two different resources, e.g. Grain and Brick:
+
+  {"value":{"rCodes":["G","B"],"cCode":"YP"},"player":"2","aCode":"PD"}
+
+Other development cards do not require the `rCodes` property.
 
 =head2 Trading
 
@@ -312,13 +329,18 @@ L<Catan|http://playcatan.com> the official website for Settlers of Catan.
 
 =head2 Version
 
-0.04
+0.4
 
 =head2 Changes
 
+
+=head2 0.4 2014-10-26
+
+The schema has been tested and the version bumped to 0.4, to match `schema/` directory structure. A complete example game log in 0.4 SGN is also provided. This version is ready to be used.
+
 =head3 0.04 2016-10-06
 
-Events are now called Actions. The idea is to strip out anything that can be inferred and only record what is left. Server type attributes like "UUID" are not required. In some cases, it was necessary to add a C<player> property to some actions, to avoid ambiguity when playing an expanded game of Settlers and there is an extra build phase per player turn.
+Events are now called Actions. The idea is to strip out anything that can be inferred and only record what is left. Server type attributes like "UUID" are not required.
 
 =head3 0.03 2015-12-24
 
@@ -334,7 +356,7 @@ Initial release
 
 =head2 Author
 
-David Farrell, E<copy> 2015.
+David Farrell, E<copy> 2016
 
 =head2 License
 
