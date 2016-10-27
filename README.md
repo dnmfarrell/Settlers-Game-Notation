@@ -1,30 +1,26 @@
-=pod
-
-=encoding utf8
-
-=head1 Settlers Game Notation
+# Settlers Game Notation
 
 This document defines a notation for the game island colonization game Settlers, called "Settlers Game Notation" (SGN). SGN is represented as JSON and is designed to capture "what happened" for a game of Settlers. However, just like with Chess notation, many actions can be implied without being logged. For instance it is not necessary to record an "end turn" action, as the next player rolling the dice implies that the prior player's turn is finished. This philosophy helps to keep the notation clean, lean and simple.
 
-=head2 Goal
+## Goal
 
 As far as this author is aware, there is no formal, public and free notation for Settlers. This document aims to establish a common language for recording games of Settlers that can be used to implement Settlers software components like games, clients, servers and AI.
 
-=head2 Status
+## Status
 
 This is a mature draft of the SGN spec, and all feedback is welcome. As of v0.4, the spec is "good enough" to be used for development - complete games can be recorded with SGN. Future changes are anticipated to be refinements of the existing spec, rather than wholesale changes.
 
-=head2 JSON Schema
+## JSON Schema
 
-The file L<message.json|schema/v0.4/message.json> is a complete JSON schema for an SGN message.
+The file [message.json](schema/v0.4/message.json) is a complete JSON schema for an SGN message.
 
-=head2 Example
+## Example
 
-A complete example game log of v0.4 SGN is included in this repo, L<game-log-v0.4.json|test-corpus/game-log-v0.4.json>. This includes over 10 rounds of play, using every example message from this schema.
+A complete example game log of v0.4 SGN is included in this repo, [game-log-v0.4.json](test-corpus/game-log-v0.4.json). This includes over 10 rounds of play, using every example message from this schema.
 
-=head2 Tests
+## Tests
 
-The L<t|t> directory has test scripts in Perl and JavaScript. L<messages.json|test-corpus/messages.json> contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require L<JSON::Validator|https://metacpan.org/pod/JSON::Validator> and L<JSON::XS|https://metacpan.org/pod/JSON::XS>:
+The [t](t) directory has test scripts in Perl and JavaScript. [messages.json](test-corpus/messages.json) contains example valid and invalid messages used for testing. The Perl tests can be run from the root project directory with `prove`, which require [JSON::Validator](https://metacpan.org/pod/JSON::Validator) and [JSON::XS](https://metacpan.org/pod/JSON::XS):
 
   $ prove -l
   prove -l
@@ -34,7 +30,7 @@ The L<t|t> directory has test scripts in Perl and JavaScript. L<messages.json|te
   Result: PASS
 
 
-If you prefer node.js, you can run the JavaScript tests, which requires L<ajv|https://github.com/epoberezkin/ajv>:
+If you prefer node.js, you can run the JavaScript tests, which requires [ajv](https://github.com/epoberezkin/ajv):
 
   $ t/messages.js
   ok 1 - load schema
@@ -43,11 +39,11 @@ If you prefer node.js, you can run the JavaScript tests, which requires L<ajv|ht
   ok 25 - Map Definition: missing harbors
   1..25
 
-=head2 Definition
+## Definition
 
 A valid SGN document a string of newline-separated JSON messages. The idea is to capture the entirety of a game of Settlers from setup to end. The order of messages is always sequential: an SGN document could describe just the game setup for example. But it couldn't describe the deployment phase unless the setup phase is also defined earlier in the same document.
 
-=head2 Messages
+## Messages
 
 Every action in a game of Settlers is described in a message format. A message is a JSON object with the following properties:
 
@@ -57,7 +53,7 @@ Every action in a game of Settlers is described in a message format. A message i
   aCode   The two letter action code (see Actions below)
   value   The value associated with the action code (see Events below)
 
-=head2 Hexes
+## Hexes
 
 All hexes (tiles) are numbered, including sea tiles, using the axial (trapezoidal) coordinate system:
 
@@ -81,7 +77,7 @@ This is the same map with the sea tiles represented by tildes (incorrect notatio
 
 Hex notation is used to define the layout of the board tiles, and other game objects like the location of the robber.
 
-=head2 Tile Codes
+## Tile Codes
 
 A tile can be any one of the `tCode` values below:
 
@@ -95,13 +91,13 @@ A tile can be any one of the `tCode` values below:
   FO    Forest
   P     Pastures
 
-=head2 Resource Number
+## Resource Number
 
 A tile can have one resource number on it (the `rNumber`), valid numbers are between 2-6 and 8-12. There is also a limit on the frequency of resource numbers. These are all the available resource numbers for a basic game:
 
   2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12
 
-=head2 Tile Notation
+## Tile Notation
 
 A tile is defined by its hex coordinates, type code and resource number. This is a central desert tile:
 
@@ -111,7 +107,7 @@ A tile is defined by its hex coordinates, type code and resource number. This is
     "rNumber": null
   }
 
-=head2 Intersections
+## Intersections
 
 Intersections represent a point between 3 hex locations in a clockwise order. Intersections are represented as an array of 3 hex locations. E.g. the six intersections of the center hex:
 
@@ -127,7 +123,7 @@ Intersections represent a point between 3 hex locations in a clockwise order. In
 
 Intersections are used to define the location of settlements and cities.
 
-=head2 Paths
+## Paths
 
 Paths are lines between contiguous intersections and are represented as an array of intersections. Each path must have at least two intersections:
 
@@ -135,7 +131,7 @@ Paths are lines between contiguous intersections and are represented as an array
 
 Paths are used to define where harbors and roads are placed.
 
-=head2 Harbors
+## Harbors
 
 Harbors are placed on paths adjacent to sea tiles. There are 6 harbor codes (`hCode`):
 
@@ -150,9 +146,9 @@ Harbors are placed on paths adjacent to sea tiles. There are 6 harbor codes (`hC
 
 Typical maps will have 4 generic harbors and 1 of every other kind.
 
-=head2 Defining the map
+## Defining the map
 
-Every tile is listed with its coordinates, type code and resource number. C<null> represents no resource number. Harbors are declared at path locations with the harbor type code. A starter map layout:
+Every tile is listed with its coordinates, type code and resource number. `null` represents no resource number. Harbors are declared at path locations with the harbor type code. A starter map layout:
 
   {
     "tiles": [
@@ -206,7 +202,7 @@ Every tile is listed with its coordinates, type code and resource number. C<null
     ]
   }
 
-=head2 Resources
+## Resources
 
 There are 5 types of resources, defined by their `rCode`:
 
@@ -218,7 +214,7 @@ There are 5 types of resources, defined by their `rCode`:
   O      Ore
   W      Wool
 
-=head2 Resources notation
+## Resources notation
 
 Resources notation records which resources and in what quantity are being traded by players with the bank or with each other.
 
@@ -229,14 +225,14 @@ It uses the resource code (`rCode`) as the key and the value as the quantity. Bo
     {"player":"2", resources:{"L": 2,"W":-1}
   ]
 
-The implication of this notation is that all resources must balance. For trades with the bank, C<B> represents the bank. Here is a bank trade by player 2, losing 4 grain to get a brick:
+The implication of this notation is that all resources must balance. For trades with the bank, `B` represents the bank. Here is a bank trade by player 2, losing 4 grain to get a brick:
 
   [
     {"player":"2", resources:{"G":-4,"B": 1},
     {"player":"B", resources:{"G": 4,"B":-1}
   ]
 
-=head2 Assets
+## Assets
 
 Players may accumulate these throughout the game. There are four normal and two special types:
 
@@ -259,7 +255,7 @@ There are 5 types of development cards:
   VP     Victory Point
   YP     Year of plenty
 
-=head2 Actions
+## Actions
 
 Actions are taken by players. Every entry in SGN is an action, consisting of an action code and a JSON object:
 
@@ -286,7 +282,7 @@ The player using Year of Plenty can declare up to two different resources, e.g. 
 
 Other development cards do not require the `rCodes` property.
 
-=head2 Trading
+## Trading
 
 Trading is a big part of Settlers. Players may trade with each other or with the Bank.
 
@@ -307,59 +303,49 @@ Here is an example trade between player 1 and player 2:
 
 The exchange begins with a Trade offer from player 1 for 1 wool in exchange for 2 brick to player 2. Player 2 accepts the offer, and this triggers the Trade action.
 
-=head2 Players
+## Players
 
 Players are just string identifiers that refer to a player of the game or the banker. Player "1" is always the player that goes first, up until player "6" (the maximum number of players).
 
-One player name is special and reserved: C<"B"> refers to the banker.
+One player name is special and reserved: `B` refers to the banker.
 
-=head1 FAQ
+## See Also
 
-=over 4
+[Pioneers](http://pio.sourceforge.net/) an open source implementation of the island colonization game.
 
-=item * I<Is SGN case-sensitive?> YES!
+[Catan](http://playcatan.com) the official website for Settlers of Catan.
 
-=back
-
-=head2 See Also
-
-L<Pioneers|http://pio.sourceforge.net/> an open source implementation of the island colonization game.
-
-L<Catan|http://playcatan.com> the official website for Settlers of Catan.
-
-=head2 Version
+## Version
 
 0.4
 
-=head2 Changes
+## Changes
 
 
-=head2 0.4 2014-10-26
+## 0.4 2014-10-26
 
 The schema has been tested and the version bumped to 0.4, to match `schema/` directory structure. A complete example game log in 0.4 SGN is also provided. This version is ready to be used.
 
-=head3 0.04 2016-10-06
+### 0.04 2016-10-06
 
 Events are now called Actions. The idea is to strip out anything that can be inferred and only record what is left. Server type attributes like "UUID" are not required.
 
-=head3 0.03 2015-12-24
+### 0.03 2015-12-24
 
-Messages can include a batch value. Added the trade decline event. Changed the definition of tiles and harbors to be objects rather than arrays. Resource notation is now an array of objects that include a player property. Removed C<player> from every event value, except for Player Add (it was redundant). Types of things are identified by new names: C<tCodes> for tile codes, C<hCodes> for harbor codes and C<cCodes> for development card codes. Added new C<VI> event type. Defined SGN schemas for log and messages.
+Messages can include a batch value. Added the trade decline event. Changed the definition of tiles and harbors to be objects rather than arrays. Resource notation is now an array of objects that include a player property. Removed `player` from every event value, except for Player Add (it was redundant). Types of things are identified by new names: `tCodes` for tile codes, `hCodes` for harbor codes and `cCodes` for development card codes. Added new `VI` event type. Defined SGN schemas for log and messages.
 
-=head3 0.02 2015-11-25
+### 0.02 2015-11-25
 
 Ports are declared on paths instead of tiles. SGN messages have event code, value, sender and UUID attributes.
 
-=head3 0.01 2015-11-20
+### 0.01 2015-11-20
 
 Initial release
 
-=head2 Author
+## Author
 
-David Farrell, E<copy> 2016
+David Farrell, &copy; 2016
 
-=head2 License
+## License
 
 FreeBSD, see LICENSE
-
-=cut
