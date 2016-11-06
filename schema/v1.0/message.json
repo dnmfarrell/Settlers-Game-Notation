@@ -1,5 +1,5 @@
 {
-  "id": "https://raw.githubusercontent.com/dnmfarrell/Settlers-Game-Notation/master/schema/v0.4/message.json",
+  "id": "https://raw.githubusercontent.com/dnmfarrell/Settlers-Game-Notation/master/schema/v1.0/message.json",
   "$schema": "http://json-schema.org/draft-04/schema#",
   "definitions": {
     "tCode": {
