@@ -7,7 +7,7 @@ use JSON::XS qw/decode_json encode_json/;
 
 my $messages = decode_json( do{ local(@ARGV, $/) = 'test-corpus/messages.json';<>} );
 my $validator = JSON::Validator->new;
-$validator->schema('schema/v0.4/message.json');
+$validator->schema('schema/v1.0/message.json');
 
 for my $msg (@$messages)
 {

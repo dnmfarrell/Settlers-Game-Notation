@@ -2,7 +2,7 @@
 "use strict";
 
 var fs = require("fs");
-fs.readFile("schema/v0.4/message.json", "utf8", function(error, data) {
+fs.readFile("schema/v1.0/message.json", "utf8", function(error, data) {
   var Ajv = require('ajv');
   var ajv = Ajv({"allErrors": true});
   var schema = ajv.compile( JSON.parse(data) );
