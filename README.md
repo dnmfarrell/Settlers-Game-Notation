@@ -8,7 +8,7 @@ As far as this author is aware, there is no formal, public and free notation for
 
 ## Status
 
-Version 1.0 is a complete notation and considered final. No further changes are expected to the notation. This README is subject to change for errors and typos.
+Version 1.0 is a complete notation and considered mature enough to be used for implementations. This README is subject to change for errors and typos.
 
 ## JSON Schema
 
@@ -256,7 +256,7 @@ There are 5 types of development cards:
 
 ## Actions
 
-Actions are taken by players. Every message in SGN is an action, consisting of an action code and a JSON object:
+Actions are taken by players. Every message in SGN is an action, consisting of an action code and a JSON object or array:
 
     aCode Name                    Value
     --------------------------------------------------------------------------------------
@@ -268,16 +268,16 @@ Actions are taken by players. Every message in SGN is an action, consisting of a
     MR    Move Robber             {"tile": <tile coordinates>}
     PD    Play Development card   {"cCode": "KN|MO|RB|VP|YP", "rCodes":[]}
     RD    Roll Dice               {"result":#}
-    ST    Steal                   {"resources":<resource notation>}
-    TR    Trade                   {"resources":<resource notation>}
+    ST    Steal                   [<resource notation>]
+    TR    Trade                   [<resource notation>]
 
 Play Development card has an optional value: `rCodes`. This is required when playing Year of Plenty or Monopoly development cards and is an array containing the resources codes for the event. Monopoly can only ever be declared on one resource. Here is an example of playing Monopoly for Ore:
 
-    {"value":{"rCodes":["O"],"cCode":"MO"},"player":"2","aCode":"PD"}
+    ["2","PD",{"cCode":"MO","rCodes":["O"]}]
 
 The player using Year of Plenty can declare up to two different resources, e.g. Grain and Brick:
 
-    {"value":{"rCodes":["G","B"],"cCode":"YP"},"player":"2","aCode":"PD"}
+    ["2","PD",{"cCode":"YP","rCodes":["G","B"]}]
 
 Other development cards do not require the `rCodes` property.
 
@@ -287,20 +287,25 @@ Trading is a big part of Settlers. Players may trade with each other or with the
 
 Bank trades are described using the trade action. For example, here's a trade between the Bank ("B") and player 2:
 
-    {
-      "aCode": "TR",
-      "value":[{"player":"B","resources":{"B":"-1","O":"4"}},{"player":"2","resources":{"B":"1","O":"-4"}}]
-      }
-    }
+    [
+      "2",
+      "TR",
+      [
+        {"player":"2","resources":{"B":1,"O":-4}},
+        {"player":"B","resources":{"B":-1,"O":4}}
+      ]
+    ]
 
 Here is an example trade between player 1 and player 2:
 
-    {
-      "aCode":"TO",
-      "value": {"resources":[{"player":"1","B":-2,"W":1},{"player":"2","B":2,"W":-1}]},
-    },
-
-The exchange begins with a Trade offer from player 1 for 1 wool in exchange for 2 brick to player 2. Player 2 accepts the offer, and this triggers the Trade action.
+    [
+      "2",
+      "TR",
+      [
+        {"player":"1","resources":{"B":-1,"O":-1,"L":1}},
+        {"player":"2","resources":{"O":1,"B":1,"L":-1}}
+      ]
+    ]
 
 ## Players
 
@@ -310,15 +315,17 @@ One player name is special and reserved: `B` refers to the banker.
 
 ## See Also
 
-[Pioneers](http://pio.sourceforge.net/) an open source implementation of the island colonization game.
+* [Pioneers](http://pio.sourceforge.net/) an open source implementation of the island colonization game.
 
-[Catan](http://playcatan.com) the official website for Settlers of Catan.
+* [JSettlers](http://nand.net/jsettlers/) another open source, Java based version
 
-## Version
+* [Catan](http://playcatan.com) the official website for Settlers of Catan.
+
+## Notation Version
 
 1.0
 
-## Changes
+## Notation Change History
 
 ## 1.0 2016-11-06
 
